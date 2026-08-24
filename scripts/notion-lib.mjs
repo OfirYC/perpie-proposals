@@ -4,7 +4,7 @@ const heading = content => ({ object: "block", type: "heading_2", heading_2: { r
 const image = (url, caption) => ({
   object: "block",
   type: "image",
-  image: { type: "external", external: { url }, caption: [text(caption)] }
+  image: { type: "external", external: { url }, caption: caption ? [text(caption)] : [] }
 });
 const embed = url => ({ object: "block", type: "embed", embed: { url } });
 const nativeBlock = block => {
@@ -15,6 +15,67 @@ const nativeBlock = block => {
   return { object: "block", type: block.type, [block.type]: { rich_text: [text(block.text)] } };
 };
 
+const copyRichText = richText => richText.map(item => {
+  const copy = { type: item.type, annotations: item.annotations };
+  copy[item.type] = item[item.type];
+  return copy;
+});
+
+async function listChildren(id, headers) {
+  const blocks = [];
+  let cursor;
+  do {
+    const url = new URL(`https://api.notion.com/v1/blocks/${encodeURIComponent(id)}/children`);
+    url.searchParams.set("page_size", "100");
+    if (cursor) url.searchParams.set("start_cursor", cursor);
+    const response = await fetch(url, { headers });
+    const result = await response.json();
+    if (!response.ok) throw new Error(result.message ?? `Notion returned ${response.status}`);
+    blocks.push(...result.results);
+    cursor = result.has_more ? result.next_cursor : undefined;
+  } while (cursor);
+  return blocks;
+}
+
+async function cloneChildren(id, headers, context) {
+  const result = [];
+  for (const block of await listChildren(id, headers)) {
+    if (block.type === "synced_block") {
+      result.push(...await cloneChildren(block.id, headers, context));
+      continue;
+    }
+    const cloned = await cloneBlock(block, headers, context);
+    if (cloned) result.push(cloned);
+  }
+  return result;
+}
+
+async function cloneBlock(block, headers, context) {
+  const { type } = block;
+  const source = block[type];
+  if (type === "image") {
+    const asset = context.images[context.imageIndex++];
+    if (!asset) throw new Error("Original proposal has more images than notion.sourceImages");
+    return image(`${context.root}/images/${asset}.png`, "");
+  }
+  if (type === "embed") {
+    const url = source.url.includes("perpie-proposals/features.html")
+      ? `${context.root}/features.html`
+      : source.url.includes("perpie-proposals/social-features.html")
+        ? `${context.root}/social-features.html`
+        : source.url;
+    return embed(url);
+  }
+  if (type === "divider") return { object: "block", type, divider: {} };
+  if (!["paragraph", "heading_2", "heading_3", "bulleted_list_item", "numbered_list_item"].includes(type)) return null;
+  const content = {
+    rich_text: copyRichText(source.rich_text ?? []),
+    color: source.color ?? "default"
+  };
+  if (block.has_children) content.children = await cloneChildren(block.id, headers, context);
+  return { object: "block", type, [type]: content };
+}
+
 export function buildNotionPayload(protocol, parentId, publicBaseUrl, now = new Date()) {
   const base = publicBaseUrl.replace(/\/$/, "");
   const root = `${base}/${protocol.slug}`;
@@ -24,7 +85,7 @@ export function buildNotionPayload(protocol, parentId, publicBaseUrl, now = new 
     icon: { type: "external", external: { url: `${root}/images/logo.png` } },
     cover: { type: "external", external: { url: `${root}/images/notion-cover.png` } },
     properties: {
-      title: { type: "title", title: [text(`${protocol.name} Proposal — Draft ${now.toISOString().slice(0, 10)}`)] }
+      title: { type: "title", title: [text(protocol.notion?.title ?? `${protocol.name} Proposal — Draft ${now.toISOString().slice(0, 10)}`)] }
     },
     children: [
       heading(`${protocol.name} × Perpie`),
@@ -52,6 +113,17 @@ export async function createNotionDraft(protocol, options) {
     "notion-version": "2022-06-28"
   };
   const payload = buildNotionPayload(protocol, parentId, publicBaseUrl);
+  if (protocol.notion?.sourcePageId) {
+    const context = {
+      root: `${publicBaseUrl.replace(/\/$/, "")}/${protocol.slug}`,
+      images: protocol.notion.sourceImages ?? [],
+      imageIndex: 0
+    };
+    payload.children = await cloneChildren(protocol.notion.sourcePageId, headers, context);
+    if (context.imageIndex !== context.images.length) {
+      throw new Error("notion.sourceImages does not match the original proposal image count");
+    }
+  }
   const remaining = payload.children.splice(100);
   const response = await fetch("https://api.notion.com/v1/pages", {
     method: "POST",

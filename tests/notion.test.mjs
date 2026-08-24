@@ -65,3 +65,43 @@ test("large protocol proposals are appended after the first Notion block chunk",
   assert.match(calls[1].url, /blocks\/page-id\/children$/);
   assert.equal(calls[1].body.children.length, 20);
 });
+
+test("source proposal layout is cloned while its visual URLs become generated assets", async t => {
+  const requests = [];
+  const originalFetch = globalThis.fetch;
+  t.after(() => { globalThis.fetch = originalFetch; });
+  globalThis.fetch = async (url, options = {}) => {
+    const method = options.method ?? "GET";
+    requests.push({ url: String(url), method, body: options.body ? JSON.parse(options.body) : null });
+    if (method === "POST") return { ok: true, json: async () => ({ id: "new-page", url: "https://notion.so/new-page" }) };
+    const id = String(url).match(/blocks\/([^/]+)\/children/)?.[1];
+    const results = id === "source-page"
+      ? [
+          { id: "synced", type: "synced_block", has_children: true, synced_block: {} },
+          { id: "source-image", type: "image", has_children: false, image: {} },
+          { id: "source-embed", type: "embed", has_children: false, embed: { url: "https://ofiryc.github.io/perpie-proposals/features.html?protocolName=vertex" } }
+        ]
+      : [{ id: "heading", type: "heading_2", has_children: false, heading_2: { rich_text: [{ type: "text", text: { content: "Overview", link: null }, annotations: {} }], color: "default" } }];
+    return { ok: true, json: async () => ({ results, has_more: false, next_cursor: null }) };
+  };
+  const sourceProtocol = {
+    ...protocol,
+    notion: {
+      title: "Perpie <> Vertex: Whitelabel Telegram Bot — Generated Draft",
+      sourcePageId: "source-page",
+      sourceImages: ["users-love-tg"]
+    }
+  };
+
+  await createNotionDraft(sourceProtocol, {
+    token: "token",
+    parentId: "parent-id",
+    publicBaseUrl: "https://example.github.io/perpie"
+  });
+
+  const created = requests.find(request => request.method === "POST").body;
+  assert.equal(created.properties.title.title[0].text.content, sourceProtocol.notion.title);
+  assert.deepEqual(created.children.map(block => block.type), ["heading_2", "image", "embed"]);
+  assert.equal(created.children[1].image.external.url, "https://example.github.io/perpie/vertex/images/users-love-tg.png");
+  assert.equal(created.children[2].embed.url, "https://example.github.io/perpie/vertex/features.html");
+});

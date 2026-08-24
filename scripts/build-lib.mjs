@@ -1,4 +1,4 @@
-import { mkdir, rm, writeFile } from "node:fs/promises";
+import { copyFile, mkdir, rm, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { chromium } from "playwright";
 
@@ -49,6 +49,10 @@ export async function buildProtocol(root, slug, outputRoot = join(root, "dist"))
   } finally {
     await browser.close();
     await new Promise(resolve => server.close(resolve));
+  }
+  for (const [name, source] of Object.entries(protocol.extraAssets ?? {})) {
+    if (!/^[a-z0-9][a-z0-9.-]*$/.test(name)) throw new Error(`Unsafe extra asset name: ${name}`);
+    await copyFile(join(root, source), join(images, name));
   }
   const manifest = {
     protocol: slug,

@@ -69,6 +69,9 @@ export function renderTemplate(id, protocol) {
   const artwork = image(asset, `${protocol.name} — ${headline}`, "artwork-image");
   const common = `data-template="${id}" data-protocol="${escapeHtml(protocol.slug)}" style="${brandStyle(protocol)}"`;
 
+  if (protocol.exactAssets) {
+    return `<main class="proposal exact-asset" ${common}>${artwork}</main>`;
+  }
   if (template.layout === "logo") {
     return `<main class="proposal logo-card" ${common}>${logo}</main>`;
   }

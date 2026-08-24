@@ -71,3 +71,12 @@ test("copy overrides are escaped before entering generated HTML", () => {
   assert.doesNotMatch(html, /<script>/);
   assert.match(html, /&lt;script&gt;/);
 });
+
+test("exact asset protocols render the source artwork without recomposition", () => {
+  const exact = { ...protocol, exactAssets: true };
+  const html = renderTemplate("groups", exact);
+
+  assert.match(html, /class="proposal exact-asset"/);
+  assert.match(html, /src="\/vertex\/groups\.jpg"/);
+  assert.doesNotMatch(html, /<h1>/);
+});
