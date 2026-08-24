@@ -71,12 +71,17 @@ For a one-off layout adjustment, add `protocols/<slug>.css`. It is scoped to tha
 
 ## Create the editable Notion draft
 
-After GitHub Pages has published `dist/`, set these values and create a new draft:
+After GitHub Pages has published `dist/`, put these values in the gitignored `.env.local` file (or export them in your shell):
+
+```dotenv
+NOTION_TOKEN=ntn_...
+NOTION_PARENT_PAGE_ID=...
+PUBLIC_BASE_URL=https://ofiryc.github.io/perpie-proposals
+```
+
+Then create the draft:
 
 ```bash
-export NOTION_TOKEN="secret_..."
-export NOTION_PARENT_PAGE_ID="..."
-export PUBLIC_BASE_URL="https://ofiryc.github.io/perpie-proposals"
 npm run notion:create -- vertex
 ```
 

@@ -6,7 +6,7 @@
     "test": "node --test",
     "serve": "node scripts/serve.mjs",
     "build": "node scripts/build.mjs",
-    "notion:create": "node scripts/notion.mjs create"
+    "notion:create": "node --env-file-if-exists=.env.local scripts/notion.mjs create"
   },
   "devDependencies": {
     "playwright": "^1.55.0"
