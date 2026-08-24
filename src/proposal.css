@@ -1,0 +1,131 @@
+@font-face {
+  font-family: "Avenir Next";
+  src: url("/fonts/AvenirNextLTPro-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Avenir Next";
+  src: url("/fonts/AvenirNextLTPro-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-display: swap;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; overflow: hidden; background: #111; }
+body { font-family: "Avenir Next", Arial, sans-serif; }
+
+.proposal {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  color: var(--protocol-theme);
+  background:
+    radial-gradient(circle at 57% 40%, color-mix(in srgb, var(--protocol-blur) 88%, transparent) 0, transparent 34%),
+    radial-gradient(circle at 20% 110%, color-mix(in srgb, var(--protocol-telegram-accent) 46%, transparent) 0, transparent 42%),
+    linear-gradient(115deg, color-mix(in srgb, var(--protocol-primary) 72%, #050706), #060808 70%);
+}
+
+.proposal::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(90deg, rgba(0,0,0,.28), transparent 50%, rgba(0,0,0,.12));
+}
+
+.protocol-logo { display: block; object-fit: contain; }
+
+.feature h1 {
+  position: absolute;
+  z-index: 3;
+  left: 96px;
+  top: 50%;
+  width: 560px;
+  margin: 0;
+  transform: translateY(-50%);
+  color: #fff;
+  font-size: 84px;
+  font-weight: 700;
+  line-height: 1.04;
+  letter-spacing: -2.4px;
+  text-shadow: 0 4px 18px rgba(0,0,0,.34);
+}
+
+.artwork {
+  position: absolute;
+  z-index: 2;
+  top: -45px;
+  right: -70px;
+  width: 920px;
+  height: 730px;
+  overflow: hidden;
+  border-radius: 90px 0 0 90px;
+  filter: drop-shadow(0 28px 48px rgba(0,0,0,.38));
+}
+
+.artwork::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, var(--protocol-primary), transparent 28%);
+  opacity: .35;
+}
+
+.artwork-image { width: 100%; height: 100%; object-fit: cover; }
+.split .artwork-image, .reverse .artwork-image { object-position: center; }
+.wide .artwork { width: 980px; }
+.center h1 { top: 72px; left: 0; width: 100%; transform: none; text-align: center; font-size: 72px; }
+.center .artwork { top: 160px; right: 165px; width: 1170px; height: 560px; border-radius: 42px 42px 0 0; }
+.reverse h1 { left: 780px; width: 620px; }
+.reverse .artwork { left: -70px; right: auto; border-radius: 0 90px 90px 0; }
+.reverse .artwork::after { background: linear-gradient(270deg, var(--protocol-primary), transparent 28%); }
+.wide h1 { left: 740px; width: 690px; }
+.wide .artwork { left: -100px; right: auto; border-radius: 0 90px 90px 0; }
+
+.corner-brand {
+  position: absolute;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  left: 42px;
+  top: 34px;
+  font-size: 24px;
+  font-weight: 700;
+}
+.corner-brand .protocol-logo { width: 44px; height: 44px; border-radius: 12px; }
+
+.notion-cover {
+  background:
+    radial-gradient(circle at 50% 50%, var(--protocol-blur), transparent 58%),
+    linear-gradient(95deg, var(--protocol-primary), var(--protocol-telegram-accent));
+}
+.brand-lockup {
+  position: absolute;
+  z-index: 2;
+  left: 72px;
+  top: 50%;
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  transform: translateY(-50%);
+  color: #fff;
+  font-size: 84px;
+}
+.brand-lockup .protocol-logo { width: 116px; height: 116px; border-radius: 28px; }
+.cover-glow { position: absolute; inset: -40%; background: radial-gradient(circle, rgba(255,255,255,.15), transparent 45%); }
+
+.partnership { display: flex; align-items: center; justify-content: center; gap: 76px; }
+.perpie-lockup, .partner-lockup { z-index: 2; display: flex; align-items: center; gap: 22px; color: #fff; font-size: 88px; }
+.partner-lockup .protocol-logo { width: 142px; height: 142px; border-radius: 50%; }
+.hat { display: grid; place-items: center; width: 150px; height: 150px; color: #fff; font-size: 130px; transform: rotate(-10deg); }
+.partnership-x { z-index: 2; font-size: 86px; font-weight: 300; }
+
+.social h1 { top: 62px; left: 0; width: 100%; transform: none; text-align: center; font-size: 72px; }
+.social .artwork { top: 158px; left: 80px; right: 80px; width: auto; height: 530px; border-radius: 46px 46px 0 0; }
+
+.logo-card { display: grid; place-items: center; background: linear-gradient(145deg, var(--protocol-primary), var(--protocol-blur)); }
+.logo-card .protocol-logo { width: 72%; height: 72%; }
