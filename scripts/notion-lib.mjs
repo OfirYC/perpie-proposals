@@ -56,7 +56,7 @@ async function cloneBlock(block, headers, context) {
   if (type === "image") {
     const asset = context.images[context.imageIndex++];
     if (!asset) throw new Error("Original proposal has more images than notion.sourceImages");
-    return image(`${context.root}/images/${asset}.png`, "");
+    return image(`${context.root}/images/${asset}.png?v=${context.version}`, "");
   }
   if (type === "embed") {
     const url = source.url.includes("perpie-proposals/features.html")
@@ -79,11 +79,12 @@ async function cloneBlock(block, headers, context) {
 export function buildNotionPayload(protocol, parentId, publicBaseUrl, now = new Date()) {
   const base = publicBaseUrl.replace(/\/$/, "");
   const root = `${base}/${protocol.slug}`;
+  const version = now.getTime();
   const featureIds = ["partnership-banner", "groups", "selfcustody", "charts", "transactional-miniapp", "traders-tracker", "ai-feature", "notifications", "pnlcards", "batch-transactions", "referral-system"];
   return {
     parent: { page_id: parentId },
-    icon: { type: "external", external: { url: `${root}/images/logo.png` } },
-    cover: { type: "external", external: { url: `${root}/images/notion-cover.png` } },
+    icon: { type: "external", external: { url: `${root}/images/logo.png?v=${version}` } },
+    cover: { type: "external", external: { url: `${root}/images/notion-cover.png?v=${version}` } },
     properties: {
       title: { type: "title", title: [text(protocol.notion?.title ?? `${protocol.name} Proposal — Draft ${now.toISOString().slice(0, 10)}`)] }
     },
@@ -112,10 +113,12 @@ export async function createNotionDraft(protocol, options) {
     "content-type": "application/json",
     "notion-version": "2022-06-28"
   };
-  const payload = buildNotionPayload(protocol, parentId, publicBaseUrl);
+  const now = new Date();
+  const payload = buildNotionPayload(protocol, parentId, publicBaseUrl, now);
   if (protocol.notion?.sourcePageId) {
     const context = {
       root: `${publicBaseUrl.replace(/\/$/, "")}/${protocol.slug}`,
+      version: now.getTime(),
       images: protocol.notion.sourceImages ?? [],
       imageIndex: 0
     };

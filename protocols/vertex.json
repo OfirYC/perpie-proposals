@@ -6,8 +6,14 @@
   "links": {
     "bot": "https://t.me/vertex_protocol_bot"
   },
+  "templates": {
+    "agent-everywhere": { "enabled": true },
+    "agent-telegram": { "enabled": true },
+    "embedded-agent": { "enabled": true },
+    "alert-to-action": { "enabled": true }
+  },
   "notion": {
-    "title": "Perpie <> Vertex: Whitelabel Telegram Bot — Generated Draft",
+    "title": "Perpie <> Vertex: Whitelabel Telegram Bot",
     "sourcePageId": "733fb90b253a42c3bad7eeb8e002f9bb",
     "sourceImages": [
       "users-love-tg",

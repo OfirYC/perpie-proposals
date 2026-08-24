@@ -28,7 +28,7 @@ test("Notion draft payload uses native blocks and hosted generated assets", () =
 
   assert.equal(payload.parent.page_id, "parent-id");
   assert.equal(payload.properties.title.title[0].text.content, "Vertex Proposal — Draft 2026-08-24");
-  assert.equal(payload.cover.external.url, "https://example.github.io/perpie/vertex/images/notion-cover.png");
+  assert.equal(payload.cover.external.url, "https://example.github.io/perpie/vertex/images/notion-cover.png?v=1787572800000");
   assert.ok(types.includes("heading_2"));
   assert.ok(types.includes("image"));
   assert.ok(types.includes("embed"));
@@ -102,6 +102,6 @@ test("source proposal layout is cloned while its visual URLs become generated as
   const created = requests.find(request => request.method === "POST").body;
   assert.equal(created.properties.title.title[0].text.content, sourceProtocol.notion.title);
   assert.deepEqual(created.children.map(block => block.type), ["heading_2", "image", "embed"]);
-  assert.equal(created.children[1].image.external.url, "https://example.github.io/perpie/vertex/images/users-love-tg.png");
+  assert.match(created.children[1].image.external.url, /^https:\/\/example\.github\.io\/perpie\/vertex\/images\/users-love-tg\.png\?v=\d+$/);
   assert.equal(created.children[2].embed.url, "https://example.github.io/perpie/vertex/features.html");
 });
