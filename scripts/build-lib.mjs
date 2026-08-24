@@ -21,7 +21,7 @@ function gallery(protocol, templates) {
   const cards = templates.map(template => `<figure><img src="images/${template.id}.png" alt="${html(protocol.name)} ${template.id}"><figcaption>${html(template.id)}</figcaption></figure>`).join("");
   return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${html(protocol.name)} proposal assets</title><style>
 body{margin:0;padding:32px;background:#111;color:#fff;font:16px system-ui}header{display:flex;align-items:center;gap:16px;margin-bottom:28px}header img{width:56px;height:56px;object-fit:contain;border-radius:12px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:24px}figure{margin:0}figure img{display:block;width:100%;height:auto;border-radius:12px;background:#222}figcaption{padding:8px 2px;color:#aaa}
-</style></head><body><header><img src="/${protocol.logo}" alt=""><h1>${html(protocol.name)} proposal assets</h1></header><main class="grid">${cards}</main></body></html>`;
+</style></head><body><header><img src="images/logo.png" alt=""><h1>${html(protocol.name)} proposal assets</h1></header><main class="grid">${cards}</main></body></html>`;
 }
 
 export async function buildProtocol(root, slug, outputRoot = join(root, "dist")) {

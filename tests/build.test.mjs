@@ -37,6 +37,7 @@ test("building Vertex writes exact-size PNGs, sliders, and manifest", { timeout:
   const grants = await readFile(join(outputRoot, "vertex/images/400k-grants.png"));
   const agentEverywhere = await readFile(join(outputRoot, "vertex/images/agent-everywhere.png"));
   const features = await readFile(join(outputRoot, "vertex/features.html"), "utf8");
+  const gallery = await readFile(join(outputRoot, "vertex/index.html"), "utf8");
 
   assert.equal(manifest.protocol, "vertex");
   assert.equal(manifest.templates.length, 18);
@@ -48,4 +49,5 @@ test("building Vertex writes exact-size PNGs, sliders, and manifest", { timeout:
   assert.match(features, /images\/agent-everywhere\.png/);
   assert.match(features, /images\/ai-feature\.png/);
   assert.match(features, /aria-label="Next slide"/);
+  assert.match(gallery, /<header><img src="images\/logo\.png"/);
 });
