@@ -60,7 +60,9 @@ export async function buildProtocol(root, slug, outputRoot = join(root, "dist"))
     templates: templates.map(({ id, width, height }) => ({ id, width, height, file: `images/${id}.png` }))
   };
   await writeFile(join(target, "index.html"), gallery(protocol, templates));
-  await writeFile(join(target, "features.html"), slider(`${protocol.name} features`, ["ai-feature", "charts", "notifications", "traders-tracker", "batch-transactions"]));
+  const featureSlides = ["agent-everywhere", "agent-telegram", "embedded-agent", "alert-to-action", "ai-feature", "charts", "notifications", "traders-tracker", "batch-transactions"]
+    .filter(id => templates.some(template => template.id === id));
+  await writeFile(join(target, "features.html"), slider(`${protocol.name} features`, featureSlides));
   await writeFile(join(target, "social-features.html"), slider(`${protocol.name} social features`, ["groups", "pnlcards", "referral-system"]));
   await writeFile(join(target, "manifest.json"), JSON.stringify(manifest, null, 2));
   return manifest;

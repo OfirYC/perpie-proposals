@@ -42,9 +42,28 @@ test("registry exposes every Figma export at its output dimensions", () => {
       ["notifications", 1500, 640],
       ["pnlcards", 1500, 640],
       ["batch-transactions", 1500, 640],
-      ["referral-system", 1500, 640]
+      ["referral-system", 1500, 640],
+      ["agent-everywhere", 1500, 640],
+      ["agent-telegram", 1500, 640],
+      ["embedded-agent", 1500, 640],
+      ["alert-to-action", 1500, 640]
     ]
   );
+});
+
+test("pivot frames are opt-in and compose the existing product assets", () => {
+  const pivotProtocol = structuredClone(protocol);
+  pivotProtocol.exactAssets = true;
+  pivotProtocol.templates["agent-everywhere"] = { enabled: true };
+
+  const html = renderTemplate("agent-everywhere", pivotProtocol);
+
+  assert.equal(enabledTemplates(protocol).some(template => template.id === "agent-everywhere"), false);
+  assert.equal(enabledTemplates(pivotProtocol).some(template => template.id === "agent-everywhere"), true);
+  assert.match(html, /class="proposal pivot pivot-agent-everywhere"/);
+  assert.match(html, /shared\/pivot\/telegram-phone\.png/);
+  assert.match(html, /shared\/pivot\/transaction-card\.png/);
+  assert.doesNotMatch(html, /class="proposal exact-asset"/);
 });
 
 test("template rendering applies brand, copy, and asset overrides", () => {
@@ -55,6 +74,9 @@ test("template rendering applies brand, copy, and asset overrides", () => {
   assert.match(html, /Trade together on Vertex/);
   assert.match(html, /src="\/vertex\/groups\.jpg"/);
   assert.match(html, /alt="Vertex — Trade together on Vertex"/);
+  assert.match(html, /class="source-art"/);
+  assert.match(html, /class="copy-mask"/);
+  assert.doesNotMatch(html, /class="artwork"/);
 });
 
 test("disabled protocol template is omitted without changing shared registry", () => {
@@ -72,11 +94,38 @@ test("copy overrides are escaped before entering generated HTML", () => {
   assert.match(html, /&lt;script&gt;/);
 });
 
-test("exact asset protocols render the source artwork without recomposition", () => {
+test("stale exact-asset flags cannot bypass dynamic template rendering", () => {
   const exact = { ...protocol, exactAssets: true };
   const html = renderTemplate("groups", exact);
 
-  assert.match(html, /class="proposal exact-asset"/);
+  assert.match(html, /class="proposal feature left"/);
   assert.match(html, /src="\/vertex\/groups\.jpg"/);
-  assert.doesNotMatch(html, /<h1>/);
+  assert.match(html, /<h1>Trade together on Vertex<\/h1>/);
+  assert.doesNotMatch(html, /class="proposal exact-asset"/);
+});
+
+test("a protocol with only brand variables receives shared generated artwork", () => {
+  const brandOnly = { ...protocol, assets: {}, templates: {} };
+  const html = renderTemplate("groups", brandOnly);
+
+  assert.match(html, /shared\/pivot\/group-phone\.png/);
+  assert.match(html, /class="generated-art"/);
+  assert.match(html, /Vertex/);
+});
+
+test("template supporting copy stays editable instead of remaining baked into artwork", () => {
+  const editable = structuredClone(protocol);
+  editable.templates["ai-feature"] = { subheadline: "Execute from plain English" };
+
+  const html = renderTemplate("ai-feature", editable);
+
+  assert.match(html, /<p class="feature-subtitle">Execute from plain English<\/p>/);
+});
+
+test("partnership banner uses the real Perpie lockup with a dynamic partner", () => {
+  const html = renderTemplate("partnership-banner", protocol);
+
+  assert.match(html, /shared\/pivot\/perpie-lockup\.png/);
+  assert.match(html, /src="\/vertex\/logo\.jpg"/);
+  assert.match(html, />Vertex<\/strong>/);
 });

@@ -23,7 +23,7 @@ npm run build -- vertex
 npm run build -- --all
 ```
 
-Output is written to `dist/<slug>/`. Each directory includes the 14 PNGs, an image gallery, `features.html`, and `social-features.html`.
+Output is written to `dist/<slug>/`. Each directory includes the generated PNGs, an image gallery, `features.html`, and `social-features.html`.
 
 ## Add a protocol
 
@@ -66,6 +66,8 @@ That is enough to generate every banner. Add optional protocol-specific copy or 
   }
 }
 ```
+
+The supplied art is used only as the product-UI layer. Headlines, layout masks, logo, name, and colors are rendered from the protocol config, so changing brand variables regenerates the complete set without returning to Figma.
 
 For a one-off layout adjustment, add `protocols/<slug>.css`. It is scoped to that protocol and loaded after the shared template CSS.
 

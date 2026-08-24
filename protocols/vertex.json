@@ -1,5 +1,4 @@
 {
-  "exactAssets": true,
   "extraAssets": {
     "400k-grants.png": "vertex/400k-grants.png"
   },
@@ -8,7 +7,10 @@
   },
   "templates": {
     "agent-everywhere": { "enabled": true },
-    "agent-telegram": { "enabled": true },
+    "agent-telegram": {
+      "enabled": true,
+      "assets": { "input": "shared/pivot/vertex-telegram-input.png" }
+    },
     "embedded-agent": { "enabled": true },
     "alert-to-action": { "enabled": true }
   },
