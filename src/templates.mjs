@@ -131,15 +131,18 @@ export function renderTemplate(id, protocol) {
   }
   if (template.layout === "cover") {
     const cover = asset ? image(asset, `${protocol.name} Telegram Bot`, "source-art") : "";
-    const mask = asset ? `<div class="cover-mask"></div>` : "";
-    return `<main class="proposal notion-cover" ${common}>${cover}${mask}<h1>${name}<br>Telegram Bot</h1></main>`;
+    const title = asset ? "" : `<h1>${name}<br>Telegram Bot</h1>`;
+    return `<main class="proposal notion-cover" ${common}>${cover}${title}</main>`;
   }
   if (template.layout === "partnership") {
     return `<main class="proposal partnership" ${common}>${image(PIVOT_ASSETS.perpie, "Perpie", "perpie-lockup")}<span class="partnership-x">×</span><div class="partner-lockup">${logo}<strong>${name}</strong></div></main>`;
   }
-  const visual = asset
-    ? `${image(asset, `${protocol.name} — ${headline}`, "source-art")}<div class="copy-mask"></div>`
-    : `<div class="generated-art">${image(DEFAULT_ART[id] ?? PIVOT_ASSETS.phone, `${protocol.name} product preview`, "generated-art-image")}<div class="generated-brand">${logo}<strong>${name}</strong></div></div>`;
-  const subtitle = subheadline ? `<p class="feature-subtitle">${escapeHtml(subheadline)}</p>` : "";
-  return `<main class="proposal feature ${template.layout}" ${common}>${visual}<h1>${escapeHtml(headline)}</h1>${subtitle}</main>`;
+  const edited = Object.hasOwn(override, "headline") || Object.hasOwn(override, "subheadline") || override.assets?.visual;
+  const useSource = asset && !edited;
+  const visual = useSource
+    ? image(asset, `${protocol.name} — ${headline}`, "source-art")
+    : `<div class="generated-art">${image(override.assets?.visual ?? DEFAULT_ART[id] ?? PIVOT_ASSETS.phone, `${protocol.name} product preview`, "generated-art-image")}<div class="generated-brand">${logo}<strong>${name}</strong></div></div>`;
+  const title = useSource ? "" : `<h1>${escapeHtml(headline)}</h1>`;
+  const subtitle = subheadline && !useSource ? `<p class="feature-subtitle">${escapeHtml(subheadline)}</p>` : "";
+  return `<main class="proposal feature ${template.layout}" ${common}>${visual}${title}${subtitle}</main>`;
 }

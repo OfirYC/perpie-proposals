@@ -72,10 +72,9 @@ test("template rendering applies brand, copy, and asset overrides", () => {
   assert.match(html, /data-protocol="vertex"/);
   assert.match(html, /--protocol-primary:#CDADEF/);
   assert.match(html, /Trade together on Vertex/);
-  assert.match(html, /src="\/vertex\/groups\.jpg"/);
-  assert.match(html, /alt="Vertex — Trade together on Vertex"/);
-  assert.match(html, /class="source-art"/);
-  assert.match(html, /class="copy-mask"/);
+  assert.match(html, /class="generated-art"/);
+  assert.doesNotMatch(html, /class="source-cleaner"/);
+  assert.doesNotMatch(html, /src="\/vertex\/groups\.jpg"/);
   assert.doesNotMatch(html, /class="artwork"/);
 });
 
@@ -99,7 +98,7 @@ test("stale exact-asset flags cannot bypass dynamic template rendering", () => {
   const html = renderTemplate("groups", exact);
 
   assert.match(html, /class="proposal feature left"/);
-  assert.match(html, /src="\/vertex\/groups\.jpg"/);
+  assert.match(html, /class="generated-art"/);
   assert.match(html, /<h1>Trade together on Vertex<\/h1>/);
   assert.doesNotMatch(html, /class="proposal exact-asset"/);
 });
@@ -120,6 +119,17 @@ test("template supporting copy stays editable instead of remaining baked into ar
   const html = renderTemplate("ai-feature", editable);
 
   assert.match(html, /<p class="feature-subtitle">Execute from plain English<\/p>/);
+});
+
+test("a protocol-specific visual uses the inherited editable layout", () => {
+  const custom = structuredClone(protocol);
+  custom.templates.groups = { assets: { visual: "vertex/custom-product.png" } };
+
+  const html = renderTemplate("groups", custom);
+
+  assert.match(html, /class="generated-art"/);
+  assert.match(html, /src="\/vertex\/custom-product\.png"/);
+  assert.match(html, /<h1>Social Group Trading<\/h1>/);
 });
 
 test("partnership banner uses the real Perpie lockup with a dynamic partner", () => {

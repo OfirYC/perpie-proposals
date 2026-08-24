@@ -11,20 +11,18 @@ import { startServer } from "../scripts/server-lib.mjs";
 
 const root = dirname(dirname(fileURLToPath(import.meta.url)));
 
-test("source-backed copy masks continue the full-canvas protocol gradient", async () => {
+test("unchanged source-backed frames render only the original artwork", async () => {
   const server = await startServer(root, 0);
   const browser = await chromium.launch({ headless: true });
   try {
     const page = await browser.newPage({ viewport: { width: 1500, height: 640 } });
-    await page.goto(`http://127.0.0.1:${server.address().port}/render/vertex/groups`);
-    const mask = await page.locator(".copy-mask").evaluate(element => {
-      const style = getComputedStyle(element, "::after");
-      return { background: style.backgroundImage, width: style.width, blurredCopies: element.querySelectorAll(".source-blur").length };
-    });
-
-    assert.match(mask.background, /rgb\(205, 173, 239\).*rgb\(239, 173, 236\).*rgb\(205, 173, 239\)/);
-    assert.equal(mask.width, "1500px");
-    assert.equal(mask.blurredCopies, 0);
+    for (const id of ["transactional-miniapp", "batch-transactions", "notifications", "traders-tracker"]) {
+      await page.goto(`http://127.0.0.1:${server.address().port}/render/vertex/${id}`);
+      assert.equal(await page.locator(".source-art").count(), 1);
+      assert.equal(await page.locator(".source-cleaner, .copy-mask, .cover-mask").count(), 0);
+      assert.equal(await page.locator("main > h1").count(), 0);
+      assert.equal(await page.locator("main").evaluate(element => getComputedStyle(element, "::after").display), "none");
+    }
   } finally {
     await browser.close();
     await new Promise(resolve => server.close(resolve));
