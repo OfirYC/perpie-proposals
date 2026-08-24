@@ -39,22 +39,27 @@ body { font-family: "Avenir Next", Arial, sans-serif; }
 .protocol-logo { display: block; object-fit: contain; }
 
 .source-art { position: absolute; z-index: 0; inset: 0; width: 100%; height: 100%; object-fit: fill; }
-.copy-mask { position: absolute; z-index: 2; pointer-events: none; }
+.copy-mask { position: absolute; z-index: 2; overflow: hidden; pointer-events: none; }
+.copy-mask::after {
+  content: ""; position: absolute; top: 0; left: 0; width: 1500px; height: 640px;
+  background: linear-gradient(90deg, var(--protocol-primary), var(--protocol-blur) 50%, var(--protocol-primary));
+}
 .feature::after { z-index: 1; opacity: .08; }
 .feature h1 {
   position: absolute; z-index: 3; margin: 0; color: #fff;
   font-size: 78px; font-weight: 700; line-height: 1.04; letter-spacing: -2.4px;
   text-shadow: 0 4px 12px rgba(85,42,108,.3);
 }
-.left .copy-mask { inset: 0 auto 0 0; width: 48%; background: linear-gradient(90deg, var(--protocol-primary) 0 94%, transparent); }
+.left .copy-mask { inset: 0 auto 0 0; width: 48%; mask-image: linear-gradient(90deg, #000 0 96%, transparent); }
 .left h1 { left: 70px; top: 50%; width: 520px; transform: translateY(-50%); }
 .feature[data-template="groups"] .copy-mask { width: 40%; }
 .feature[data-template="selfcustody"] .copy-mask { width: 54%; }
-.feature[data-template="batch-transactions"] .copy-mask { width: 46%; }
+.feature[data-template="batch-transactions"] .copy-mask { width: 50%; }
 .feature[data-template="referral-system"] .copy-mask { width: 41%; }
-.right .copy-mask { inset: 0 0 0 auto; width: 58%; background: linear-gradient(270deg, var(--protocol-primary) 0 94%, transparent); }
+.right .copy-mask { inset: 0 0 0 auto; width: 58%; mask-image: linear-gradient(270deg, #000 0 96%, transparent); }
+.right .copy-mask::after { right: 0; left: auto; }
 .right h1 { right: 70px; top: 50%; width: 560px; transform: translateY(-50%); text-align: left; }
-.top .copy-mask, .social .copy-mask { inset: 0 0 auto; height: 25%; background: linear-gradient(180deg, var(--protocol-blur) 0 94%, transparent); }
+.top .copy-mask, .social .copy-mask { inset: 0 0 auto; height: 25%; mask-image: linear-gradient(180deg, #000 0 96%, transparent); }
 .top[data-template="transactional-miniapp"] .copy-mask,
 .top[data-template="notifications"] .copy-mask { height: 42%; }
 .top h1, .social h1 { left: 8%; right: 8%; top: 48px; text-align: center; font-size: 68px; }
@@ -74,7 +79,8 @@ body { font-family: "Avenir Next", Arial, sans-serif; }
 
 .notion-cover { background: linear-gradient(95deg, var(--protocol-primary), var(--protocol-blur), var(--protocol-primary)); }
 .notion-cover::after { z-index: 1; opacity: .08; }
-.notion-cover .cover-mask { position: absolute; z-index: 2; inset: 0 27%; background: linear-gradient(90deg, transparent, var(--protocol-blur) 18% 82%, transparent); }
+.notion-cover .cover-mask { position: absolute; z-index: 2; inset: 0 27%; overflow: hidden; mask-image: linear-gradient(90deg, transparent, #000 18% 82%, transparent); }
+.notion-cover .cover-mask::after { content: ""; position: absolute; left: 50%; top: 0; width: 2170px; height: 381px; transform: translateX(-50%); background: linear-gradient(90deg, var(--protocol-primary), var(--protocol-blur) 50%, var(--protocol-primary)); }
 .notion-cover h1 { position: absolute; z-index: 3; inset: 0; display: grid; place-content: center; margin: 0; color: #fff; text-align: center; font-size: 76px; line-height: 1.02; text-shadow: 0 4px 12px rgba(85,42,108,.3); }
 
 .partnership { display: flex; align-items: center; justify-content: center; gap: 76px; background: linear-gradient(108deg, var(--protocol-primary), var(--protocol-blur) 52%, var(--protocol-primary)); }
