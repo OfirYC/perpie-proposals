@@ -1,0 +1,14 @@
+{
+  "name": "perpie-proposals",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test",
+    "serve": "node scripts/serve.mjs",
+    "build": "node scripts/build.mjs",
+    "notion:create": "node scripts/notion.mjs create"
+  },
+  "devDependencies": {
+    "playwright": "^1.55.0"
+  }
+}
