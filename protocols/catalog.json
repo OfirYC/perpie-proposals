@@ -1,5 +1,6 @@
 [
   {"slug":"avantis","name":"Avantis","legacyDir":"avantis","logoFile":"logo.png","colors":{"primary":"#96E21B","blur":"#00FFA2","telegramAccent":"#72B41A","theme":"#FFFFFF"}},
+  {"slug":"avantis-demo","name":"Avantis","logo":"avantis/logo.png","colors":{"primary":"#96E21B","blur":"#00FFA2","telegramAccent":"#72B41A","telegramBotAccent":"#72B41A","theme":"#FFFFFF"},"links":{"bot":"https://t.me/avantis","github":"https://github.com/ofirYC/perpie-proposals/tree/master/avantis"}},
   {"slug":"balancer","name":"Balancer","legacyDir":"Balancer","colors":{"primary":"#2A2A2A","blur":"#464646","telegramAccent":"#656565","theme":"#FFFFFF"}},
   {"slug":"camelot","name":"Camelot","legacyDir":"Camelot","colors":{"primary":"#AE7E26","blur":"#EAB85E","telegramAccent":"#6B490C","theme":"#FFFFFF"}},
   {"slug":"dodo","name":"DODO","legacyDir":"DODO","colors":{"primary":"#FFE903","blur":"#D6BE05","telegramAccent":"#035FFF","theme":"#FFFFFF"}},
