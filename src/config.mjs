@@ -28,6 +28,14 @@ const LEGACY_FILES = {
   "referral-system": "referral-system.jpg"
 };
 
+const PROPOSAL_DEFAULTS = {
+  extraAssets: { "400k-grants.png": "vertex/400k-grants.png" },
+  notion: {
+    sourcePageId: "733fb90b253a42c3bad7eeb8e002f9bb",
+    sourceImages: ["users-love-tg", "partnership-banner", "transactional-miniapp", "selfcustody", "400k-grants"]
+  }
+};
+
 export function merge(base, override) {
   if (!isObject(base) || !isObject(override)) return structuredClone(override);
   const result = structuredClone(base);
@@ -103,5 +111,5 @@ export async function loadProtocol(root, slug) {
   const base = catalog.find(protocol => protocol.slug === slug);
   if (!base) throw new Error(`Unknown protocol: ${slug}`);
   const override = await readJson(join(root, `protocols/${slug}.json`), true);
-  return validate(merge(expandLegacy(base), override));
+  return validate(merge(PROPOSAL_DEFAULTS, merge(expandLegacy(base), override)));
 }

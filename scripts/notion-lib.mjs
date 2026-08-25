@@ -15,9 +15,17 @@ const nativeBlock = block => {
   return { object: "block", type: block.type, [block.type]: { rich_text: [text(block.text)] } };
 };
 
-const copyRichText = richText => richText.map(item => {
+const copyRichText = (richText, context) => richText.map(item => {
   const copy = { type: item.type, annotations: item.annotations };
   copy[item.type] = item[item.type];
+  if (item.type === "text") {
+    copy.text = {
+      ...item.text,
+      content: item.text.content
+        .replaceAll(context.sourceName, context.protocolName)
+        .replaceAll(context.sourceSlug, context.protocolSlug)
+    };
+  }
   return copy;
 });
 
@@ -69,7 +77,7 @@ async function cloneBlock(block, headers, context) {
   if (type === "divider") return { object: "block", type, divider: {} };
   if (!["paragraph", "heading_2", "heading_3", "bulleted_list_item", "numbered_list_item"].includes(type)) return null;
   const content = {
-    rich_text: copyRichText(source.rich_text ?? []),
+    rich_text: copyRichText(source.rich_text ?? [], context),
     color: source.color ?? "default"
   };
   if (block.has_children) content.children = await cloneChildren(block.id, headers, context);
@@ -120,7 +128,11 @@ export async function createNotionDraft(protocol, options) {
       root: `${publicBaseUrl.replace(/\/$/, "")}/${protocol.slug}`,
       version: now.getTime(),
       images: protocol.notion.sourceImages ?? [],
-      imageIndex: 0
+      imageIndex: 0,
+      sourceName: protocol.notion.sourceName ?? "Vertex",
+      sourceSlug: protocol.notion.sourceSlug ?? "vertex",
+      protocolName: protocol.name,
+      protocolSlug: protocol.slug
     };
     payload.children = await cloneChildren(protocol.notion.sourcePageId, headers, context);
     if (context.imageIndex !== context.images.length) {

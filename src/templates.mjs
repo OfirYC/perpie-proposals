@@ -90,6 +90,12 @@ const DEFAULT_ART = {
   "referral-system": "shared/pivot/transaction-card.png"
 };
 
+const figmaArt = template => template.id === "notion-cover"
+  ? "vertex/notion-cover.png"
+  : `vertex/${template.file}`;
+
+const inheritedArt = (template, alt) => `<div class="inherited-art">${image(figmaArt(template), alt, "source-art")}<div class="brand-tint" aria-hidden="true"></div></div>`;
+
 function renderPivot(template, common, headline, protocol, logo, name) {
   const assets = { ...PIVOT_ASSETS, ...(protocol.templates?.[template.id]?.assets ?? {}) };
   const title = `<h1>${escapeHtml(headline)}</h1>`;
@@ -130,7 +136,9 @@ export function renderTemplate(id, protocol) {
     return `<main class="proposal logo-card" ${common}>${logo}</main>`;
   }
   if (template.layout === "cover") {
-    const cover = asset ? image(asset, `${protocol.name} Telegram Bot`, "source-art") : "";
+    const cover = asset
+      ? image(asset, `${protocol.name} Telegram Bot`, "source-art")
+      : `${inheritedArt(template, `${protocol.name} Telegram Bot`)}<div class="cover-mask"></div>`;
     const title = asset ? "" : `<h1>${name}<br>Telegram Bot</h1>`;
     return `<main class="proposal notion-cover" ${common}>${cover}${title}</main>`;
   }
@@ -141,8 +149,10 @@ export function renderTemplate(id, protocol) {
   const useSource = asset && !edited;
   const visual = useSource
     ? image(asset, `${protocol.name} — ${headline}`, "source-art")
-    : `<div class="generated-art">${image(override.assets?.visual ?? DEFAULT_ART[id] ?? PIVOT_ASSETS.phone, `${protocol.name} product preview`, "generated-art-image")}<div class="generated-brand">${logo}<strong>${name}</strong></div></div>`;
-  const title = useSource ? "" : `<h1>${escapeHtml(headline)}</h1>`;
-  const subtitle = subheadline && !useSource ? `<p class="feature-subtitle">${escapeHtml(subheadline)}</p>` : "";
+    : !edited
+      ? inheritedArt(template, `${protocol.name} — ${headline}`)
+      : `<div class="generated-art">${image(override.assets?.visual ?? DEFAULT_ART[id] ?? PIVOT_ASSETS.phone, `${protocol.name} product preview`, "generated-art-image")}<div class="generated-brand">${logo}<strong>${name}</strong></div></div>`;
+  const title = useSource || !edited ? "" : `<h1>${escapeHtml(headline)}</h1>`;
+  const subtitle = subheadline && edited ? `<p class="feature-subtitle">${escapeHtml(subheadline)}</p>` : "";
   return `<main class="proposal feature ${template.layout}" ${common}>${visual}${title}${subtitle}</main>`;
 }

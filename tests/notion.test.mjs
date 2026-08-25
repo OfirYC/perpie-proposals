@@ -81,11 +81,13 @@ test("source proposal layout is cloned while its visual URLs become generated as
           { id: "source-image", type: "image", has_children: false, image: {} },
           { id: "source-embed", type: "embed", has_children: false, embed: { url: "https://ofiryc.github.io/perpie-proposals/features.html?protocolName=vertex" } }
         ]
-      : [{ id: "heading", type: "heading_2", has_children: false, heading_2: { rich_text: [{ type: "text", text: { content: "Overview", link: null }, annotations: {} }], color: "default" } }];
+      : [{ id: "heading", type: "heading_2", has_children: false, heading_2: { rich_text: [{ type: "text", text: { content: "Vertex integration uses vertex APIs", link: null }, annotations: {} }], color: "default" } }];
     return { ok: true, json: async () => ({ results, has_more: false, next_cursor: null }) };
   };
   const sourceProtocol = {
     ...protocol,
+    slug: "avantis-demo",
+    name: "Avantis",
     notion: {
       title: "Perpie <> Vertex: Whitelabel Telegram Bot — Generated Draft",
       sourcePageId: "source-page",
@@ -102,6 +104,7 @@ test("source proposal layout is cloned while its visual URLs become generated as
   const created = requests.find(request => request.method === "POST").body;
   assert.equal(created.properties.title.title[0].text.content, sourceProtocol.notion.title);
   assert.deepEqual(created.children.map(block => block.type), ["heading_2", "image", "embed"]);
-  assert.match(created.children[1].image.external.url, /^https:\/\/example\.github\.io\/perpie\/vertex\/images\/users-love-tg\.png\?v=\d+$/);
-  assert.equal(created.children[2].embed.url, "https://example.github.io/perpie/vertex/features.html");
+  assert.equal(created.children[0].heading_2.rich_text[0].text.content, "Avantis integration uses avantis-demo APIs");
+  assert.match(created.children[1].image.external.url, /^https:\/\/example\.github\.io\/perpie\/avantis-demo\/images\/users-love-tg\.png\?v=\d+$/);
+  assert.equal(created.children[2].embed.url, "https://example.github.io/perpie/avantis-demo/features.html");
 });

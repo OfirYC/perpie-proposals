@@ -51,6 +51,9 @@ test("protocol override changes only the requested inherited fields", async () =
   assert.equal(protocol.colors.blur, "#EFADEC");
   assert.equal(protocol.templates.groups.headline, "Trade together on Vertex");
   assert.equal(protocol.templates.groups.assets.hero, "vertex/custom-groups.png");
+  assert.equal(protocol.notion.sourcePageId, "733fb90b253a42c3bad7eeb8e002f9bb");
+  assert.deepEqual(protocol.notion.sourceImages, ["users-love-tg", "partnership-banner", "transactional-miniapp", "selfcustody", "400k-grants"]);
+  assert.equal(protocol.extraAssets["400k-grants.png"], "vertex/400k-grants.png");
 });
 
 test("unsafe protocol slug is rejected before reading files", async () => {

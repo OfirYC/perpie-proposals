@@ -103,13 +103,13 @@ test("stale exact-asset flags cannot bypass dynamic template rendering", () => {
   assert.doesNotMatch(html, /class="proposal exact-asset"/);
 });
 
-test("a protocol with only brand variables receives shared generated artwork", () => {
+test("a protocol with only brand variables inherits the Figma artwork", () => {
   const brandOnly = { ...protocol, assets: {}, templates: {} };
   const html = renderTemplate("groups", brandOnly);
 
-  assert.match(html, /shared\/pivot\/group-phone\.png/);
-  assert.match(html, /class="generated-art"/);
-  assert.match(html, /Vertex/);
+  assert.match(html, /src="\/vertex\/groups\.jpg"/);
+  assert.match(html, /class="brand-tint"/);
+  assert.doesNotMatch(html, /class="generated-art"/);
 });
 
 test("template supporting copy stays editable instead of remaining baked into artwork", () => {
