@@ -23,9 +23,8 @@ body { font-family: "Avenir Next", Arial, sans-serif; }
   overflow: hidden;
   color: var(--protocol-theme);
   background:
-    radial-gradient(circle at 57% 40%, color-mix(in srgb, var(--protocol-blur) 88%, transparent) 0, transparent 34%),
-    radial-gradient(circle at 20% 110%, color-mix(in srgb, var(--protocol-telegram-accent) 46%, transparent) 0, transparent 42%),
-    linear-gradient(115deg, color-mix(in srgb, var(--protocol-primary) 72%, #050706), #060808 70%);
+    radial-gradient(ellipse at 50% 50%, color-mix(in srgb, var(--protocol-blur) 86%, white 14%) 0, transparent 56%),
+    linear-gradient(108deg, var(--protocol-primary), var(--protocol-blur) 52%, var(--protocol-primary));
 }
 
 .proposal::after {
@@ -39,23 +38,125 @@ body { font-family: "Avenir Next", Arial, sans-serif; }
 .protocol-logo { display: block; object-fit: contain; }
 
 .source-art { position: absolute; z-index: 0; inset: 0; width: 100%; height: 100%; object-fit: fill; }
-.inherited-art { position: absolute; inset: 0; }
-.brand-tint {
-  position: absolute; inset: 0; z-index: 1; pointer-events: none;
-  background: linear-gradient(108deg, var(--protocol-primary), var(--protocol-blur) 52%, var(--protocol-primary));
-  mix-blend-mode: color;
-}
 .feature::after { display: none; }
 .feature h1 {
   position: absolute; z-index: 3; margin: 0; color: #fff;
-  font-size: 78px; font-weight: 700; line-height: 1.04; letter-spacing: -2.4px;
-  text-shadow: 0 4px 12px rgba(85,42,108,.3);
+  font-size: 84px; font-weight: 700; line-height: 1.04; letter-spacing: -2px;
+  text-shadow: 0 4px 10px rgba(85,42,108,.22);
 }
-.left h1 { left: 70px; top: 50%; width: 520px; transform: translateY(-50%); }
-.right h1 { right: 70px; top: 50%; width: 560px; transform: translateY(-50%); text-align: left; }
-.top h1, .social h1 { left: 8%; right: 8%; top: 48px; text-align: center; font-size: 68px; }
-.social h1 { top: 50px; }
-.feature-subtitle { position: absolute; z-index: 3; left: 15%; right: 15%; top: 112px; margin: 0; color: rgba(255,255,255,.82); text-align: center; font-size: 24px; }
+.left h1 { left: 82px; top: 50%; width: 520px; transform: translateY(-50%); }
+.right h1 { right: 42px; top: 50%; width: 600px; transform: translateY(-50%); }
+.top h1, .social h1 { left: 6%; right: 6%; top: 28px; text-align: center; }
+.feature-subtitle { position: absolute; z-index: 3; left: 15%; right: 15%; top: 126px; margin: 0; color: rgba(255,255,255,.82); text-align: center; font-size: 25px; }
+
+.figma-art { position: absolute; z-index: 1; inset: 0; }
+.figma-art .protocol-logo { object-fit: contain; }
+
+.figma-phone {
+  position: absolute; width: 300px; height: 610px; padding: 13px; overflow: hidden;
+  border: 9px solid #0b0b0c; border-radius: 46px; background: #0b0b0c;
+  box-shadow: 0 20px 34px rgba(0,0,0,.32);
+}
+.figma-phone::before { content: ""; position: absolute; z-index: 4; left: 50%; top: 8px; width: 92px; height: 22px; transform: translateX(-50%); border-radius: 0 0 15px 15px; background: #09090a; }
+.phone-screen { position: relative; height: 100%; overflow: hidden; border-radius: 29px; background: #f7f7f7; color: #111; font-family: Arial, sans-serif; }
+.phone-screen > header { height: 57px; display: flex; align-items: center; justify-content: center; gap: 7px; padding-top: 10px; border-bottom: 1px solid #ddd; background: #fff; font-size: 14px; }
+.phone-screen > header .protocol-logo { width: 25px; height: 25px; border-radius: 50%; }
+.phone-screen > header span { position: absolute; right: 15px; }
+.phone-screen > footer { position: absolute; left: 0; right: 0; bottom: 0; height: 39px; padding: 10px 9px; background: color-mix(in srgb, var(--protocol-telegram-accent) 88%, white); color: white; font-size: 12px; }
+.chat { position: absolute; inset: 57px 0 39px; padding: 30px 10px 10px; background: linear-gradient(color-mix(in srgb, var(--protocol-blur) 85%, white), var(--protocol-blur)); font-size: 11px; }
+.chat > i { display: block; text-align: center; opacity: .5; }
+.chat p { max-width: 82%; padding: 8px; border-radius: 10px; background: white; box-shadow: 0 2px 5px rgba(0,0,0,.08); }
+.chat p.mine { margin-left: auto; background: var(--protocol-telegram-accent); color: white; }
+
+.figma-groups .group-phone { left: 790px; top: 30px; width: 365px; height: 738px; }
+
+.login-preview { height: 100%; background: var(--protocol-blur); }
+.login-blur { height: 245px; opacity: .65; background: repeating-linear-gradient(90deg, rgba(255,255,255,.2) 0 2px, transparent 2px 32px); }
+.login-preview section { position: absolute; left: 0; right: 0; bottom: 38px; height: 260px; padding: 55px 22px; border-radius: 30px 30px 0 0; background: #fff; text-align: center; }
+.login-preview section > b { display: block; margin-bottom: 40px; font-size: 17px; }
+.login-preview section > span { display: inline-flex; flex-direction: column; align-items: center; width: 80px; font-size: 31px; font-weight: 700; }
+.login-preview section small { margin-top: 6px; font-size: 12px; font-weight: 400; }
+.figma-selfcustody .custody-phone { left: 895px; top: 42px; width: 310px; height: 650px; }
+
+.figma-charts .chart-phone { width: 310px; height: 650px; }
+.chart-one { left: 45px; top: -210px; transform: rotate(-43deg); }
+.chart-two { left: 345px; top: 170px; transform: rotate(-43deg); }
+.chart-ui { position: absolute; inset: 58px 0 39px; padding: 35px 18px; background: #fff; }
+.chart-ui > b { font-size: 17px; }
+.candles { height: 330px; margin-top: 45px; background: repeating-linear-gradient(90deg, transparent 0 18px, color-mix(in srgb, var(--protocol-primary) 82%, #171717) 19px 22px, transparent 23px 37px), repeating-linear-gradient(0deg, transparent 0 36px, #ddd 37px); clip-path: polygon(0 72%, 10% 61%, 18% 66%, 30% 44%, 40% 52%, 52% 22%, 61% 35%, 73% 18%, 83% 38%, 100% 11%, 100% 76%, 0 76%); }
+.candles.alt { transform: scaleY(-1); }
+
+.figma-transactional .trade-phone { left: 595px; top: 165px; width: 285px; height: 590px; }
+.figma-transactional .success-phone { left: 1030px; top: 165px; width: 285px; height: 590px; }
+.flow-arrow { position: absolute; left: 904px; top: 385px; color: white; font-size: 54px; }
+.success { position: absolute; inset: 225px 0 39px; display: flex; flex-direction: column; align-items: center; gap: 8px; padding-top: 45px; background: white; }
+.success b { display: grid; place-items: center; width: 86px; height: 86px; border: 3px solid var(--protocol-telegram-accent); border-radius: 50%; color: var(--protocol-telegram-accent); font-size: 45px; }
+.success strong { font-size: 24px; }
+.success span { font-size: 11px; }
+
+.position-card { display: flex; flex-direction: column; gap: 3px; width: 390px; padding: 18px; border-radius: 13px; background: rgba(255,255,255,.9); color: #151515; box-shadow: 0 13px 30px rgba(0,0,0,.12); font: 18px/1.2 Arial, sans-serif; }
+.position-card > div { display: flex; align-items: center; gap: 7px; margin-bottom: 7px; }
+.position-card .protocol-logo { width: 25px; height: 25px; border-radius: 50%; }
+.position-card.compact { width: auto; margin: 15px 10px 0; padding: 10px; border-radius: 7px; font-size: 10px; box-shadow: none; }
+.position-card.compact > div { display: none; }
+.action-rows { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; font: 12px Arial, sans-serif; }
+.action-rows > * { padding: 8px; border-radius: 5px; background: color-mix(in srgb, var(--protocol-telegram-accent) 88%, #111); color: #fff; text-align: center; font-style: normal; }
+.action-rows > strong, .action-rows > span { grid-column: 1 / -1; }
+.phone-screen > .action-rows { margin: 5px 10px; }
+
+.figma-tracker .tracker-card { position: absolute; left: 555px; top: 170px; display: flex; flex-direction: column; width: 360px; padding: 20px; border-radius: 10px; background: rgba(255,255,255,.9); color: #151515; font: 18px/1.2 Arial, sans-serif; box-shadow: 0 18px 32px rgba(0,0,0,.14); }
+.tracker-card > .protocol-logo { position: absolute; left: 17px; top: 15px; width: 27px; height: 27px; border-radius: 50%; }
+.tracker-card > b { padding-left: 35px; }
+.tracker-card > span, .tracker-card > em { margin-top: 13px; font-style: normal; }
+.tracker-card .action-rows { margin-top: 16px; }
+.brand-glyph { position: absolute; right: 175px; top: 105px; display: grid; place-items: center; width: 280px; height: 455px; overflow: hidden; border-radius: 8px; background: rgba(255,255,255,.16); }
+.brand-glyph::before { content: ""; position: absolute; inset: -100px -40px; transform: rotate(28deg); border-radius: 50%; background: rgba(255,255,255,.18); }
+.brand-glyph .protocol-logo { z-index: 1; width: 170px; height: 170px; opacity: .4; }
+
+.figma-ai .position-card { position: absolute; left: 555px; top: 245px; }
+.confirm { position: absolute; left: 555px; top: 440px; width: 390px; height: 44px; border: 0; border-radius: 7px; background: var(--protocol-telegram-accent); color: white; font: 700 18px Avenir Next, sans-serif; }
+.ai-link { position: absolute; left: 728px; top: 493px; color: white; font-size: 42px; font-style: normal; }
+.tg-input { position: absolute; left: 305px; right: 305px; bottom: 47px; display: flex; align-items: center; gap: 13px; height: 84px; padding: 10px 13px; border-radius: 18px; background: color-mix(in srgb, var(--protocol-primary) 58%, white); color: #333; font: 18px Arial, sans-serif; box-shadow: 0 8px 20px rgba(0,0,0,.1); }
+.tg-input b { padding: 13px 17px; border-radius: 999px; background: var(--protocol-telegram-accent); color: white; font-weight: 400; }
+.tg-input span { font-size: 28px; }
+.tg-input em { flex: 1; padding: 13px 20px; border-radius: 999px; background: white; font-style: normal; }
+.tg-input i { display: grid; place-items: center; width: 47px; height: 47px; border-radius: 50%; background: var(--protocol-telegram-accent); color: white; font-size: 28px; font-style: normal; }
+
+.figma-notifications { display: flex; flex-direction: column; align-items: center; padding-top: 205px; }
+.notification-card { position: relative; display: flex; align-items: flex-start; gap: 12px; width: 500px; min-height: 112px; margin-top: -27px; padding: 18px; border-radius: 23px; background: rgba(255,255,255,.82); color: #151515; box-shadow: 0 10px 25px rgba(0,0,0,.1); font: 16px Arial, sans-serif; }
+.notification-card .protocol-logo { width: 54px; height: 54px; border-radius: 14px; }
+.notification-card div { display: flex; flex-direction: column; gap: 7px; }
+.notification-card small { position: absolute; right: 17px; top: 17px; color: #8a8a8a; }
+
+.pnl-card { position: absolute; top: 210px; width: 360px; height: 510px; border-radius: 10px; box-shadow: 0 20px 35px rgba(0,0,0,.15); }
+.back-card { left: 840px; transform: rotate(12deg); background: linear-gradient(#ff008b,#ffc44c); }
+.mid-card { left: 750px; transform: rotate(4deg); background: linear-gradient(var(--protocol-blur),var(--protocol-primary)); }
+.front-card { left: 610px; padding: 22px; background: color-mix(in srgb, var(--protocol-telegram-accent) 68%, white); color: white; font: 20px Arial, sans-serif; }
+.front-card header { display: flex; align-items: center; gap: 8px; margin-bottom: 28px; }
+.front-card header .protocol-logo { width: 32px; height: 32px; border-radius: 50%; }
+.front-card header span { margin-left: auto; }
+.front-card small, .front-card b, .front-card strong { display: block; margin-top: 19px; }
+.front-card b { font-size: 34px; }
+.front-card strong { font-size: 29px; }
+.front-card > span { position: absolute; left: 22px; right: 22px; bottom: 20px; }
+
+.figma-batch .action-rows { position: absolute; left: 760px; top: 155px; width: 540px; font-size: 17px; filter: drop-shadow(0 20px 30px rgba(0,0,0,.14)); }
+.figma-batch .action-rows > * { padding: 13px; }
+.figma-batch .action-rows > span { opacity: .76; }
+.figma-batch .action-rows > span:last-child { opacity: .42; }
+
+.figma-referral .referral-card { position: absolute; left: 800px; top: 185px; display: flex; flex-direction: column; width: 390px; padding: 18px; border-radius: 9px; background: rgba(255,255,255,.94); color: #151515; box-shadow: 0 17px 30px rgba(0,0,0,.12); font: 15px/1.35 Arial, sans-serif; }
+.referral-card > header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.referral-card > header .protocol-logo { width: 28px; height: 28px; border-radius: 50%; }
+.referral-card > header span { margin-left: auto; }
+.referral-card code { margin: 8px 0; font-size: 13px; }
+.referral-ghost { position: absolute; left: 880px; top: 95px; width: 350px; padding: 20px; border-radius: 9px; background: var(--protocol-telegram-accent); color: white; text-align: center; opacity: .24; }
+
+.figma-social .social-card { position: absolute; width: 360px; padding: 24px; border-radius: 18px; background: rgba(255,255,255,.86); color: #111; font: 700 25px Arial, sans-serif; box-shadow: 0 18px 35px rgba(0,0,0,.16); }
+.figma-social .card-a { left: 135px; top: 315px; transform: rotate(-8deg); }
+.figma-social .card-b { right: 100px; top: 240px; transform: rotate(7deg); }
+.figma-social .social-phone { left: 600px; top: 110px; height: 590px; transform: rotate(4deg); }
+.social-orb { position: absolute; left: 705px; top: 250px; z-index: 5; display: grid; place-items: center; width: 110px; height: 110px; border-radius: 50%; background: var(--protocol-telegram-accent); font-size: 55px; box-shadow: 0 16px 28px rgba(0,0,0,.2); }
 
 .generated-art {
   position: absolute; z-index: 0; inset: 0; display: flex; align-items: center; justify-content: flex-end;
@@ -71,10 +172,12 @@ body { font-family: "Avenir Next", Arial, sans-serif; }
 .notion-cover { background: linear-gradient(95deg, var(--protocol-primary), var(--protocol-blur), var(--protocol-primary)); }
 .notion-cover::after { display: none; }
 .notion-cover h1 { position: absolute; z-index: 3; inset: 0; display: grid; place-content: center; margin: 0; color: #fff; text-align: center; font-size: 76px; line-height: 1.02; text-shadow: 0 4px 12px rgba(85,42,108,.3); }
-.cover-edge { position: absolute; inset: 0; }
-.cover-edge .source-art { width: 100%; height: 100%; }
-.cover-left { mask-image: linear-gradient(90deg, #000 0 27%, transparent 33%); }
-.cover-right { mask-image: linear-gradient(90deg, transparent 68%, #000 74%); }
+.notion-cover .cover-phone { z-index: 1; top: -105px; width: 260px; height: 535px; transform: rotate(-9deg); }
+.notion-cover .cover-phone-left { left: 150px; }
+.notion-cover .cover-phone-right { right: 150px; transform: rotate(9deg); }
+.cover-chat { padding: 75px 12px; background: var(--protocol-blur); height: 100%; }
+.cover-chat p { padding: 10px; border-radius: 10px; background: white; font: 11px Arial, sans-serif; }
+.cover-chat p.mine { margin-left: 35px; background: var(--protocol-telegram-accent); color: white; }
 
 .partnership { display: flex; align-items: center; justify-content: center; gap: 76px; background: linear-gradient(108deg, var(--protocol-primary), var(--protocol-blur) 52%, var(--protocol-primary)); }
 .partnership::after { opacity: .08; }

@@ -72,7 +72,7 @@ test("template rendering applies brand, copy, and asset overrides", () => {
   assert.match(html, /data-protocol="vertex"/);
   assert.match(html, /--protocol-primary:#CDADEF/);
   assert.match(html, /Trade together on Vertex/);
-  assert.match(html, /class="generated-art"/);
+  assert.match(html, /class="figma-art figma-groups"/);
   assert.doesNotMatch(html, /class="source-cleaner"/);
   assert.doesNotMatch(html, /src="\/vertex\/groups\.jpg"/);
   assert.doesNotMatch(html, /class="artwork"/);
@@ -98,28 +98,29 @@ test("stale exact-asset flags cannot bypass dynamic template rendering", () => {
   const html = renderTemplate("groups", exact);
 
   assert.match(html, /class="proposal feature left"/);
-  assert.match(html, /class="generated-art"/);
+  assert.match(html, /class="figma-art figma-groups"/);
   assert.match(html, /<h1>Trade together on Vertex<\/h1>/);
   assert.doesNotMatch(html, /class="proposal exact-asset"/);
 });
 
-test("a protocol with only brand variables inherits the Figma artwork", () => {
+test("a protocol with only brand variables renders the shared Figma layout without Vertex artwork", () => {
   const brandOnly = { ...protocol, assets: {}, templates: {} };
   const html = renderTemplate("groups", brandOnly);
 
-  assert.match(html, /src="\/vertex\/groups\.jpg"/);
-  assert.match(html, /class="brand-tint"/);
-  assert.doesNotMatch(html, /class="generated-art"/);
+  assert.match(html, /class="figma-art figma-groups"/);
+  assert.match(html, /<h1>Social Group Trading<\/h1>/);
+  assert.match(html, /src="\/vertex\/logo\.jpg"/);
+  assert.doesNotMatch(html, /vertex\/groups\.jpg|brand-tint|source-art/);
 });
 
-test("an inherited cover keeps the Figma phones without the baked title", () => {
+test("a generated cover is composed from live protocol variables", () => {
   const brandOnly = { ...protocol, assets: {}, templates: {} };
   const html = renderTemplate("notion-cover", brandOnly);
 
-  assert.match(html, /class="cover-edge cover-left"/);
-  assert.match(html, /class="cover-edge cover-right"/);
+  assert.match(html, /class="figma-phone cover-phone cover-phone-left"/);
+  assert.match(html, /src="\/vertex\/logo\.jpg"/);
   assert.match(html, /<h1>Vertex<br>Telegram Bot<\/h1>/);
-  assert.doesNotMatch(html, /cover-mask/);
+  assert.doesNotMatch(html, /vertex\/notion-cover\.png|brand-tint|source-art/);
 });
 
 test("template supporting copy stays editable instead of remaining baked into artwork", () => {

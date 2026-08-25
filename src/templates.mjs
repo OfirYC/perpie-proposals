@@ -76,28 +76,43 @@ const PIVOT_ASSETS = {
   transaction: "shared/pivot/transaction-card.png"
 };
 
-const DEFAULT_ART = {
-  "users-love-tg": "shared/pivot/group-phone.png",
-  groups: "shared/pivot/group-phone.png",
-  selfcustody: "shared/pivot/telegram-phone.png",
-  charts: "shared/pivot/position.png",
-  "transactional-miniapp": "shared/pivot/transaction-card.png",
-  "traders-tracker": "shared/pivot/group-phone.png",
-  "ai-feature": "shared/pivot/transaction-card.png",
-  notifications: "shared/pivot/positions.png",
-  pnlcards: "shared/pivot/position.png",
-  "batch-transactions": "shared/pivot/positions.png",
-  "referral-system": "shared/pivot/transaction-card.png"
-};
+const telegramInput = () => `<div class="tg-input"><b>☰ Menu</b><span>⌕</span><em>ape 10x btc ASAP w all my USDC</em><i>↑</i></div>`;
 
-const figmaArt = template => template.id === "notion-cover"
-  ? "vertex/notion-cover.png"
-  : `vertex/${template.file}`;
+const appHeader = (logo, name) => `<header>${logo}<strong>${name}</strong><span>•••</span></header>`;
 
-const inheritedArt = (template, alt) => `<div class="inherited-art">${image(figmaArt(template), alt, "source-art")}<div class="brand-tint" aria-hidden="true"></div></div>`;
-const inheritedCover = alt => ["left", "right"]
-  .map(side => `<div class="cover-edge cover-${side}">${image("vertex/notion-cover.png", alt, "source-art")}<div class="brand-tint" aria-hidden="true"></div></div>`)
-  .join("");
+const actionRows = () => `<div class="action-rows"><b>↩ Back</b><b>▣ Main Menu</b><strong>🔴 Close All</strong><span>💎 ARB | 💰$34.92 | ⏱18.3264x</span><span>💎 BTC | 💰$1.750 | ⏱2.1112x</span></div>`;
+
+function phone(logo, name, content, className = "") {
+  return `<div class="figma-phone ${className}"><div class="phone-screen">${appHeader(logo, name)}${content}<footer>☰ Menu　　◯　　⌁</footer></div></div>`;
+}
+
+const positionCard = (logo, name, compact = false) => `<article class="position-card${compact ? " compact" : ""}"><div>${logo}<strong>${name}</strong></div><b>💎 Position Details: WBTC</b><span>📊 Type:　　　　 Long</span><span>💰 Size:　　　　 $54.5660</span><span>🪙 Collateral:　 $10.9007</span><span>⚒ Leverage:　　 5.0057x</span></article>`;
+
+const notification = (logo, name, text) => `<article class="notification-card">${logo}<div><b>${name}</b><span>${text}</span></div><small>now</small></article>`;
+
+function figmaVisual(id, logo, name) {
+  const chat = `<div class="chat"><i>Today</i><p>Welcome to ${name} — your personal trading atlas</p><p class="mine">check my position</p><p>🏆 Leaderboard<br>1) trader_one +58.5%<br>2) trader_two +42%</p></div>`;
+  const trade = `${positionCard(logo, name, true)}${actionRows()}`;
+  const success = `<div class="success"><b>✓</b><strong>Success!</strong><span>Sent Transaction Successfully</span></div>`;
+
+  if (id === "users-love-tg") return `<div class="figma-art figma-social"><div class="social-card card-a">Natural-language trading</div><div class="social-card card-b">Self-custodial execution</div>${phone(logo, name, chat, "social-phone")}<div class="social-orb">🤝</div></div>`;
+  if (id === "groups") return `<div class="figma-art figma-groups">${phone(logo, name, chat, "group-phone")}</div>`;
+  if (id === "selfcustody") return `<div class="figma-art figma-selfcustody">${phone(logo, name, `<div class="login-preview"><div class="login-blur"></div><section><b>Choose Login</b><span>⌁<small>Passkey</small></span><span>G<small>Google</small></span></section></div>`, "custody-phone")}</div>`;
+  if (id === "charts") return `<div class="figma-art figma-charts">${phone(logo, name, `<div class="chart-ui"><b>BTC / USDC</b><div class="candles"></div></div>`, "chart-phone chart-one")}${phone(logo, name, `<div class="chart-ui"><b>ETH / USDC</b><div class="candles alt"></div></div>`, "chart-phone chart-two")}</div>`;
+  if (id === "transactional-miniapp") return `<div class="figma-art figma-transactional">${phone(logo, name, trade, "trade-phone")}${phone(logo, name, success, "success-phone")}<b class="flow-arrow">-&gt;</b></div>`;
+  if (id === "traders-tracker") return `<div class="figma-art figma-tracker"><article class="tracker-card">${logo}<b>${name} | Your Tracked Traders</b><span>You can track other users or addresses and get notified about their actions.</span><em>1) @sifu<br>2) @perpiepa<br>3) 0x937...FD1</em>${actionRows()}</article><div class="brand-glyph">${logo}</div></div>`;
+  if (id === "ai-feature") return `<div class="figma-art figma-ai">${positionCard(logo, name)}<button class="confirm">✓ Confirm</button><i class="ai-link">⌁</i>${telegramInput()}</div>`;
+  if (id === "notifications") return `<div class="figma-art figma-notifications">${notification(logo, name, "💎 Position Details: WBTC")}${notification(logo, name, "✅ Opened WBTC Short")}${notification(logo, name, "↗ Order Details: Increase")}${notification(logo, name, "✳ Created WBTC Increase Order")}</div>`;
+  if (id === "pnlcards") return `<div class="figma-art figma-pnl"><article class="pnl-card back-card"></article><article class="pnl-card mid-card"></article><article class="pnl-card front-card">${appHeader(logo, name)}<small>WBTCUSD　 Short　 x15.31</small><b>+24%</b><strong>$34,012</strong><strong>$36,932</strong><span>10% Off Fees　　▦</span></article></div>`;
+  if (id === "batch-transactions") return `<div class="figma-art figma-batch">${actionRows()}</div>`;
+  if (id === "referral-system") return `<div class="figma-art figma-referral"><div class="referral-ghost">/referrals</div><article class="referral-card">${appHeader(logo, name)}<b>📑 Your Referral Details</b><span>👥 Number of Referees: 37</span><span>💰 All-Time Earnings: $89,372</span><span>⏳ Pending Earnings: $2,862</span><span>🔗 Current Epoch: 40</span><span>◷ Next Payout In: 4 Days</span><code>/referral link: ${name.toLowerCase()}-bot</code>${actionRows()}</article></div>`;
+  return `<div class="figma-art"></div>`;
+}
+
+function coverPhones(logo, name) {
+  const content = `<div class="cover-chat"><p>Welcome to ${name}</p><p class="mine">Open my positions</p><p>Review and confirm your transaction.</p></div>`;
+  return `${phone(logo, name, content, "cover-phone cover-phone-left")}${phone(logo, name, content, "cover-phone cover-phone-right")}`;
+}
 
 function renderPivot(template, common, headline, protocol, logo, name) {
   const assets = { ...PIVOT_ASSETS, ...(protocol.templates?.[template.id]?.assets ?? {}) };
@@ -141,7 +156,7 @@ export function renderTemplate(id, protocol) {
   if (template.layout === "cover") {
     const cover = asset
       ? image(asset, `${protocol.name} Telegram Bot`, "source-art")
-      : inheritedCover(`${protocol.name} Telegram Bot`);
+      : coverPhones(logo, name);
     const title = asset ? "" : `<h1>${name}<br>Telegram Bot</h1>`;
     return `<main class="proposal notion-cover" ${common}>${cover}${title}</main>`;
   }
@@ -152,10 +167,10 @@ export function renderTemplate(id, protocol) {
   const useSource = asset && !edited;
   const visual = useSource
     ? image(asset, `${protocol.name} — ${headline}`, "source-art")
-    : !edited
-      ? inheritedArt(template, `${protocol.name} — ${headline}`)
-      : `<div class="generated-art">${image(override.assets?.visual ?? DEFAULT_ART[id] ?? PIVOT_ASSETS.phone, `${protocol.name} product preview`, "generated-art-image")}<div class="generated-brand">${logo}<strong>${name}</strong></div></div>`;
-  const title = useSource || !edited ? "" : `<h1>${escapeHtml(headline)}</h1>`;
-  const subtitle = subheadline && edited ? `<p class="feature-subtitle">${escapeHtml(subheadline)}</p>` : "";
+    : override.assets?.visual
+      ? `<div class="generated-art">${image(override.assets.visual, `${protocol.name} product preview`, "generated-art-image")}<div class="generated-brand">${logo}<strong>${name}</strong></div></div>`
+      : figmaVisual(id, logo, name);
+  const title = useSource ? "" : `<h1>${escapeHtml(headline)}</h1>`;
+  const subtitle = subheadline && !useSource ? `<p class="feature-subtitle">${escapeHtml(subheadline)}</p>` : "";
   return `<main class="proposal feature ${template.layout}" ${common}>${visual}${title}${subtitle}</main>`;
 }
