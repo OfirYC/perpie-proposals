@@ -112,6 +112,16 @@ test("a protocol with only brand variables inherits the Figma artwork", () => {
   assert.doesNotMatch(html, /class="generated-art"/);
 });
 
+test("an inherited cover keeps the Figma phones without the baked title", () => {
+  const brandOnly = { ...protocol, assets: {}, templates: {} };
+  const html = renderTemplate("notion-cover", brandOnly);
+
+  assert.match(html, /class="cover-edge cover-left"/);
+  assert.match(html, /class="cover-edge cover-right"/);
+  assert.match(html, /<h1>Vertex<br>Telegram Bot<\/h1>/);
+  assert.doesNotMatch(html, /cover-mask/);
+});
+
 test("template supporting copy stays editable instead of remaining baked into artwork", () => {
   const editable = structuredClone(protocol);
   editable.templates["ai-feature"] = { subheadline: "Execute from plain English" };

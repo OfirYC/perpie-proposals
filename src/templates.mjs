@@ -95,6 +95,9 @@ const figmaArt = template => template.id === "notion-cover"
   : `vertex/${template.file}`;
 
 const inheritedArt = (template, alt) => `<div class="inherited-art">${image(figmaArt(template), alt, "source-art")}<div class="brand-tint" aria-hidden="true"></div></div>`;
+const inheritedCover = alt => ["left", "right"]
+  .map(side => `<div class="cover-edge cover-${side}">${image("vertex/notion-cover.png", alt, "source-art")}<div class="brand-tint" aria-hidden="true"></div></div>`)
+  .join("");
 
 function renderPivot(template, common, headline, protocol, logo, name) {
   const assets = { ...PIVOT_ASSETS, ...(protocol.templates?.[template.id]?.assets ?? {}) };
@@ -138,7 +141,7 @@ export function renderTemplate(id, protocol) {
   if (template.layout === "cover") {
     const cover = asset
       ? image(asset, `${protocol.name} Telegram Bot`, "source-art")
-      : `${inheritedArt(template, `${protocol.name} Telegram Bot`)}<div class="cover-mask"></div>`;
+      : inheritedCover(`${protocol.name} Telegram Bot`);
     const title = asset ? "" : `<h1>${name}<br>Telegram Bot</h1>`;
     return `<main class="proposal notion-cover" ${common}>${cover}${title}</main>`;
   }
