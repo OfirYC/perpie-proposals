@@ -29,13 +29,20 @@ export function sliderPage() {
 <title>Perpie proposal carousel</title>
 <style>
 *{box-sizing:border-box}
-html,body{margin:0;width:100%;height:100%;background:#0b0d0c;overflow:hidden;
+/* Transparent, deliberately: the Notion API cannot set an embed block's height,
+   so the iframe is always taller than a 2.34:1 banner. With no background of our
+   own the host page shows through instead of black bars, and the block reads as
+   the banner itself rather than a banner floating in a box. */
+html,body{margin:0;width:100%;height:100%;background:transparent;overflow:hidden;
   font:14px Inter,system-ui,-apple-system,sans-serif;color:#fff}
 .stage{position:relative;width:100%;height:100%;display:grid;place-items:center}
-/* contain, not cover: the boards are 2.34:1 and must never be cropped to fit
-   whatever box the host iframe happens to be */
-.slide{position:absolute;max-width:100%;max-height:100%;width:auto;height:auto;
-  object-fit:contain;opacity:0;transition:opacity .35s;border-radius:6px}
+/* The frame carries the board's own 2.34:1 ratio, so the controls sit ON the
+   banner rather than floating in the host's leftover iframe height — and the
+   boards are never cropped to fit a box we do not control. */
+.frame{position:relative;width:100%;aspect-ratio:1500/640;max-height:100%;
+  margin:auto;border-radius:6px;overflow:hidden}
+.slide{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;
+  opacity:0;transition:opacity .35s}
 .slide.current{opacity:1}
 .nav{position:absolute;z-index:2;top:50%;translate:0 -50%;display:grid;place-items:center;
   width:42px;height:42px;border:1px solid #ffffff40;border-radius:50%;background:#000000a6;
@@ -43,7 +50,7 @@ html,body{margin:0;width:100%;height:100%;background:#0b0d0c;overflow:hidden;
 .nav:hover{background:#000000d9}
 .prev{left:14px}.next{right:14px}
 .nav:focus-visible{outline:2px solid #fff;outline-offset:3px}
-.dots{position:absolute;z-index:2;bottom:12px;left:50%;translate:-50% 0;display:flex;gap:7px}
+.dots{position:absolute;z-index:2;bottom:10px;left:50%;translate:-50% 0;display:flex;gap:7px}
 .dot{width:7px;height:7px;border-radius:50%;border:0;padding:0;background:#ffffff40;cursor:pointer}
 .dot.current{background:#fff}
 .msg{opacity:.6}
@@ -77,13 +84,16 @@ const fail = why => { msg.textContent = why; };
   if (!ids.length) return fail("Nothing to show for " + protocol + ".");
 
   msg.remove();
+  const frame = document.createElement("div");
+  frame.className = "frame";
+  stage.append(frame);
   const slides = ids.map((id, i) => {
     const img = document.createElement("img");
     img.className = "slide" + (i ? "" : " current");
     img.src = protocol + "/images/" + id + ".png";
     img.alt = protocol + " " + id.replace(/-/g, " ");
     img.loading = i ? "lazy" : "eager";
-    stage.append(img);
+    frame.append(img);
     return img;
   });
 
@@ -106,7 +116,7 @@ const fail = why => { msg.textContent = why; };
     b.setAttribute("aria-label", label);
     b.textContent = cls === "prev" ? "\\u2039" : "\\u203A";
     b.onclick = () => go(current + step);
-    stage.append(b);
+    frame.append(b);
   };
 
   let current = 0, timer;
@@ -123,7 +133,7 @@ const fail = why => { msg.textContent = why; };
     if (slides.length > 1) timer = setInterval(() => go(current + 1), 5000);
   };
 
-  if (slides.length > 1) { nav("prev", "Previous", -1); nav("next", "Next", 1); stage.append(dots); }
+  if (slides.length > 1) { nav("prev", "Previous", -1); nav("next", "Next", 1); frame.append(dots); }
   addEventListener("keydown", e => {
     if (e.key === "ArrowLeft") go(current - 1);
     if (e.key === "ArrowRight") go(current + 1);
