@@ -67,6 +67,17 @@ function luminance(hex) {
 
 const onAccent = accent => (luminance(accent) > 0.45 ? "#0B1410" : "#FFFFFF");
 
+// The cover headline is "<name> AI Agent" set on one line inside a 658px block.
+// It was drawn for "Safe"; a longer brand name ("X1 EcoChain") overruns the
+// board and collides with the artwork beside it, so scale the line down to fit.
+// Avenir Next Bold averages ~0.52em per character, which matches the 86px line
+// the board ships with.
+function headlineRule(name) {
+  const width = `${name} AI Agent`.length * 0.52;
+  const size = Math.min(86, Math.floor(636 / width));
+  return size >= 86 ? "" : `[data-pencil-name="Title Row"]>div{font-size:${size}px!important;line-height:1.12!important}`;
+}
+
 function brandVars(protocol) {
   const { colors } = protocol;
   const [h, s, l] = hexToHsl(colors.telegramAccent);
@@ -197,6 +208,7 @@ html,body{margin:0;padding:0;background:transparent;overflow:hidden}
 #stage{transform-origin:top left}
 .wl-logo{background-image:var(--wl-logo)!important}
 .wl-platform{background-image:var(--wl-platform)!important}
+${headlineRule(protocol.name)}
 ${inlined.css}
 </style></head><body><div id="stage">${body}</div>
 <script>

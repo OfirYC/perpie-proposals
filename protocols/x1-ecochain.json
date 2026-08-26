@@ -1,0 +1,26 @@
+{
+  "slug": "x1-ecochain",
+  "name": "X1 EcoChain",
+  "logo": "x1-ecochain/logo.png",
+  "platform": "x1-ecochain/platform.png",
+  "colors": {
+    "primary": "#0C1410",
+    "blur": "#1C4430",
+    "telegramAccent": "#5B9D07",
+    "telegramBotAccent": "#5B9D07",
+    "theme": "#FFFFFF"
+  },
+  "links": {
+    "bot": "https://t.me/x1ecochain",
+    "github": "https://github.com/ofirYC/perpie-proposals/tree/master/x1-ecochain"
+  },
+  "templates": {
+    "agent-everywhere": { "enabled": true },
+    "agent-telegram": { "enabled": true },
+    "embedded-agent": { "enabled": true },
+    "alert-to-action": { "enabled": true }
+  },
+  "notion": {
+    "title": "Perpie <> X1 EcoChain: Whitelabel Telegram Bot"
+  }
+}
