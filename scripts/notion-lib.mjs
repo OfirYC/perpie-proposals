@@ -116,11 +116,24 @@ async function cloneBlock(block, headers, context) {
     // CI turns into that protocol's images.
     const file = Object.keys(SLIDER_FILES).find(name => source.url.includes(`perpie-proposals/${name}`));
     if (file) {
-      const url = sliderUrl(context.site, context.protocolSlug, SLIDER_FILES[file]);
+      const set = SLIDER_FILES[file];
+      // An animated GIF goes in as an *image* block, which Notion sizes to the
+      // file's own aspect ratio — the embed block has no width/height in the API,
+      // so an iframe carousel is always letterboxed inside a fixed square.
+      const gif = context.assetDir ? join(context.assetDir.replace(/\/images$/, ""), `${set}.gif`) : null;
+      if (gif && existsSync(gif)) {
+        return {
+          object: "block",
+          type: "image",
+          image: { type: "file_upload", file_upload: { id: await uploadAsset(gif, context.headers, context.uploads, "image/gif") }, caption: [] }
+        };
+      }
+      const url = sliderUrl(context.site, context.protocolSlug, set);
       if (!await reachable(url, context.embeds)) {
-        context.warnings?.push(`carousel not deployed yet, omitted: ${url} — push master so CI publishes it`);
+        context.warnings?.push(`carousel unavailable (no ${set}.gif built, ${url} not deployed)`);
         return null;
       }
+      context.warnings?.push(`no ${set}.gif (is ffmpeg installed?), used the hosted carousel instead`);
       return embed(url);
     }
     if (source.url.startsWith(context.root) && !await reachable(source.url, context.embeds)) {

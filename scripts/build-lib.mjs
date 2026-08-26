@@ -1,4 +1,6 @@
 import { copyFile, mkdir, readFile, readdir, rm, writeFile } from "node:fs/promises";
+import { execFileSync } from "node:child_process";
+import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { chromium } from "playwright";
 
@@ -89,7 +91,37 @@ export async function buildProtocol(root, slug, outputRoot = join(root, "dist"))
     await writeFile(join(target, name), slider(`${protocol.name} ${file}`, slides));
   }
   await writeSliderPage(outputRoot);
+  for (const [set, ids] of Object.entries(SLIDER_SETS)) {
+    await buildCarouselGif(target, set, ids.filter(id => templates.some(t => t.id === id)));
+  }
   return manifest;
+}
+
+// Notion cannot size an `embed` block — the API accepts only url/caption — so an
+// HTML carousel always lands in a fixed, roughly square box with black bands
+// around a 2.34:1 banner. An animated GIF is an *image* block, and Notion sizes
+// images to their own aspect ratio, so the frame matches the banner exactly.
+async function buildCarouselGif(target, set, ids) {
+  if (ids.length < 2) return;
+  const staging = join(tmpdir(), `carousel-${set}-${process.pid}`);
+  await rm(staging, { recursive: true, force: true });
+  await mkdir(staging, { recursive: true });
+  try {
+    for (const [index, id] of ids.entries()) {
+      await copyFile(join(target, "images", `${id}.png`), join(staging, `${String(index).padStart(2, "0")}.png`));
+    }
+    // a palette generated across all frames, then dithered, keeps the dark
+    // gradients from banding once they are quantised to GIF's 256 colours
+    execFileSync("ffmpeg", ["-y", "-loglevel", "error", "-framerate", "1/2.5",
+      "-pattern_type", "glob", "-i", join(staging, "*.png"),
+      "-vf", "scale=1200:-1:flags=lanczos,split[a][b];[a]palettegen=max_colors=256:stats_mode=diff[p];" +
+             "[b][p]paletteuse=dither=sierra2_4a:diff_mode=rectangle",
+      "-loop", "0", join(target, `${set}.gif`)], { stdio: "ignore" });
+  } catch {
+    // ffmpeg missing: the Notion path falls back to the hosted slider embed
+  } finally {
+    await rm(staging, { recursive: true, force: true });
+  }
 }
 
 // the shared carousel lives at the site root, next to the per-protocol folders
