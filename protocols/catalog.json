@@ -21,11 +21,9 @@
   {"slug":"polynomial","name":"Polynomial","legacyDir":"polynomial","logoFile":"logo.png","genericExtension":"png","colors":{"primary":"#CDFE40","blur":"#ADD637","telegramAccent":"#956DC1","theme":"#FFFFFF"}},
   {"slug":"pump-science","name":"Pump Science","legacyDir":"pumpscience","logoFile":"Logo.png","genericExtension":"png","colors":{"primary":"#AFA2F4","blur":"#CFA2F4","telegramAccent":"#585082","theme":"#FFFFFF"}},
   {"slug":"quickswap","name":"QuickSwap","legacyDir":"Quickswap","colors":{"primary":"#172B4E","blur":"#22326E","telegramAccent":"#2088C5","theme":"#FFFFFF"}},
-  {"slug":"safe","name":"Safe","legacyDir":"Safe","colors":{"primary":"#121312","blur":"#15433C","telegramAccent":"#118263","theme":"#FFFFFF"}},
   {"slug":"satoshi","name":"Satoshi","legacyDir":"Satoshi","colors":{"primary":"#FF9500","blur":"#FD7200","telegramAccent":"#0077FF","theme":"#FFFFFF"}},
   {"slug":"sushiswap","name":"SushiSwap","legacyDir":"Sushiswap","colors":{"primary":"#F853A0","blur":"#D373D8","telegramAccent":"#6F2C4B","theme":"#FFFFFF"}},
   {"slug":"synfutures","name":"SynFutures","legacyDir":"SynFutures","colors":{"primary":"#23535A","blur":"#29646D","telegramAccent":"#0884AA","theme":"#FFFFFF"}},
-  {"slug":"vertex","name":"Vertex","legacyDir":"vertex","logoFile":"Logo.png","genericExtension":"png","colors":{"primary":"#CDADEF","blur":"#EFADEC","telegramAccent":"#956DC1","theme":"#FFFFFF"}},
   {"slug":"woofi","name":"WOOFi","legacyDir":"WOOFI","colors":{"primary":"#07080A","blur":"#002E2E","telegramAccent":"#207DB0","theme":"#FFFFFF"}},
   {"slug":"zapper","name":"Zapper","legacyDir":"Zapper","colors":{"primary":"#784FFE","blur":"#9854FF","telegramAccent":"#363091","theme":"#FFFFFF"}}
 ]

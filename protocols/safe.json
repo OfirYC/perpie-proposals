@@ -1,0 +1,34 @@
+{
+  "slug": "safe",
+  "name": "Safe",
+  "logo": "Safe/logo.png",
+  "platform": "Safe/platform.png",
+  "colors": {
+    "primary": "#121312",
+    "blur": "#0E5233",
+    "telegramAccent": "#12FF80",
+    "telegramBotAccent": "#12FF80",
+    "theme": "#FFFFFF"
+  },
+  "links": {
+    "bot": "https://t.me/safe",
+    "github": "https://github.com/ofirYC/perpie-proposals/tree/master/Safe"
+  },
+  "templates": {
+    "agent-everywhere": {
+      "enabled": true
+    },
+    "agent-telegram": {
+      "enabled": true
+    },
+    "embedded-agent": {
+      "enabled": true
+    },
+    "alert-to-action": {
+      "enabled": true
+    }
+  },
+  "notion": {
+    "title": "Perpie <> Safe: Whitelabel Telegram Bot"
+  }
+}

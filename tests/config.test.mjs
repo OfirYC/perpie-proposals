@@ -86,3 +86,15 @@ test("legacy directory expands into default logo, asset, and public links", asyn
   assert.equal(protocol.assets["partnership-banner"], "vertex/Partnership Baner.jpg");
   assert.equal(protocol.links.github, "https://github.com/ofirYC/perpie-proposals/tree/master/vertex");
 });
+
+test("platform screenshot is optional but must be a safe relative path", async () => {
+  const { loadProtocol } = await import("../src/config.mjs");
+  const root = new URL("..", import.meta.url).pathname;
+
+  const pendle = await loadProtocol(root, "pendle");
+  assert.equal(pendle.platform, "Pendle/platform.png");
+
+  // protocols without one still load
+  const balancer = await loadProtocol(root, "balancer");
+  assert.equal(balancer.platform, undefined);
+});

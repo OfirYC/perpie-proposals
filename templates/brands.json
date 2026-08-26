@@ -1,0 +1,248 @@
+{
+ "Safe": {
+  "name": "Safe",
+  "primary": "#121312",
+  "blur": "#15433c",
+  "accent": "#118263",
+  "theme": "#ffffff",
+  "logo": "./images/3c6bafb9de31f4ff.png",
+  "ring": [
+   "#5fddff",
+   "#28f5a4",
+   "#15fe85"
+  ]
+ },
+ "Avantis": {
+  "name": "Avantis",
+  "primary": "#96e21b",
+  "blur": "#00ffa2",
+  "accent": "#72b41a",
+  "theme": "#ffffff",
+  "logo": "./images/0d287ccff97b1c67.png"
+ },
+ "Balancer": {
+  "name": "Balancer",
+  "primary": "#2a2a2a",
+  "blur": "#464646",
+  "accent": "#656565",
+  "theme": "#ffffff",
+  "logo": "./images/42696ee82d8f94ee.png"
+ },
+ "Camelot": {
+  "name": "Camelot",
+  "primary": "#ae7e26",
+  "blur": "#eab85e",
+  "accent": "#6b490c",
+  "theme": "#ffffff",
+  "logo": "./images/4153b1508cafa16e.png"
+ },
+ "DODO": {
+  "name": "DODO",
+  "primary": "#ffe903",
+  "blur": "#d6be05",
+  "accent": "#035fff",
+  "theme": "#ffffff",
+  "logo": "./images/0e9fe2dfb1bf2cf7.png"
+ },
+ "Dexalot": {
+  "name": "Dexalot",
+  "primary": "#15121d",
+  "blur": "#340e25",
+  "accent": "#de20b5",
+  "theme": "#ffffff",
+  "logo": "./images/111ba303b4d748c1.png"
+ },
+ "Flash.trade": {
+  "name": "Flash.trade",
+  "primary": "#094636",
+  "blur": "#053529",
+  "accent": "#bf7600",
+  "theme": "#ffffff",
+  "logo": "./images/4cad70a2b5c61d01.png"
+ },
+ "GMX": {
+  "name": "GMX",
+  "primary": "#2c2b68",
+  "blur": "#433d99",
+  "accent": "#6966ff",
+  "theme": "#ffffff",
+  "logo": "./images/83b034a263e425f4.png"
+ },
+ "HMX": {
+  "name": "HMX",
+  "primary": "#222222",
+  "blur": "#2a2619",
+  "accent": "#a98845",
+  "theme": "#ffffff",
+  "logo": "./images/cc1be6f85a52142a.png"
+ },
+ "JOJO": {
+  "name": "JOJO",
+  "primary": "#01d1a7",
+  "blur": "#00aea8",
+  "accent": "#005140",
+  "theme": "#ffffff",
+  "logo": "./images/b352b654d6fde63d.png"
+ },
+ "Jumper": {
+  "name": "Jumper",
+  "primary": "#7b3fe4",
+  "blur": "#add637",
+  "accent": "#956dc1",
+  "theme": "#ffffff",
+  "logo": "./images/8ff2078a190ac037.png"
+ },
+ "KTX": {
+  "name": "KTX",
+  "primary": "#50effd",
+  "blur": "#50b9df",
+  "accent": "#2f6a6f",
+  "theme": "#ffffff",
+  "logo": "./images/f62a23738fba9df4.png"
+ },
+ "Merchent Moe": {
+  "name": "Merchent Moe",
+  "primary": "#180134",
+  "blur": "#3e252e",
+  "accent": "#eb82a6",
+  "theme": "#ffffff",
+  "logo": "./images/35094533bf67b4f7.png"
+ },
+ "Mux": {
+  "name": "Mux",
+  "primary": "#040818",
+  "blur": "#082e32",
+  "accent": "#5aceff",
+  "theme": "#ffffff",
+  "logo": "./images/5d00dc801576f426.png"
+ },
+ "Pancakeswap": {
+  "name": "Pancakeswap",
+  "primary": "#1fc7d4",
+  "blur": "#51dde8",
+  "accent": "#d1884f",
+  "theme": "#ffffff",
+  "logo": "./images/35640fb69a74ebf9.png"
+ },
+ "Pendle": {
+  "name": "Pendle",
+  "primary": "#000000",
+  "blur": "#242424",
+  "accent": "#808181",
+  "theme": "#ffffff",
+  "logo": "./images/1b3e6a83dee61b69.png"
+ },
+ "Perpie": {
+  "name": "Perpie",
+  "primary": "#9970d6",
+  "blur": "#bb8eed",
+  "accent": "#582c98",
+  "theme": "#ffffff",
+  "logo": "./images/7e840d43379ffeaa.jpg"
+ },
+ "Polymarket": {
+  "name": "Polymarket",
+  "primary": "#1652f0",
+  "blur": "#16a4f0",
+  "accent": "#6f97ff",
+  "theme": "#ffffff",
+  "logo": "./images/40b9784ebbdb65f6.png"
+ },
+ "Polynomial": {
+  "name": "Polynomial",
+  "primary": "#cdfe40",
+  "blur": "#add637",
+  "accent": "#956dc1",
+  "theme": "#ffffff",
+  "logo": "./images/b9e1c950868ac76f.png"
+ },
+ "Pump Science": {
+  "name": "Pump Science",
+  "primary": "#afa2f4",
+  "blur": "#cfa2f4",
+  "accent": "#585082",
+  "theme": "#ffffff",
+  "logo": "./images/b7f552340dc55302.jpg"
+ },
+ "Quickswap": {
+  "name": "Quickswap",
+  "primary": "#172b4e",
+  "blur": "#22326e",
+  "accent": "#2088c5",
+  "theme": "#ffffff",
+  "logo": "./images/7d9d9e55f2bc848b.png"
+ },
+ "Satoshi": {
+  "name": "Satoshi",
+  "primary": "#ff9500",
+  "blur": "#fd7200",
+  "accent": "#0077ff",
+  "theme": "#ffffff",
+  "logo": null
+ },
+ "Sushiswap": {
+  "name": "Sushiswap",
+  "primary": "#f853a0",
+  "blur": "#d373d8",
+  "accent": "#6f2c4b",
+  "theme": "#ffffff",
+  "logo": "./images/4351c5a864f992ea.png"
+ },
+ "SynFutures": {
+  "name": "SynFutures",
+  "primary": "#23535a",
+  "blur": "#29646d",
+  "accent": "#0884aa",
+  "theme": "#ffffff",
+  "logo": "./images/ea9322e2b80ba959.png"
+ },
+ "Vertex": {
+  "name": "Vertex",
+  "primary": "#cdadef",
+  "blur": "#efadec",
+  "accent": "#956dc1",
+  "theme": "#ffffff",
+  "logo": "./images/vertex-logo.png"
+ },
+ "WOOFI": {
+  "name": "WOOFI",
+  "primary": "#07080a",
+  "blur": "#002e2e",
+  "accent": "#207db0",
+  "theme": "#ffffff",
+  "logo": "./images/04778060a78532b4.png"
+ },
+ "Zapper": {
+  "name": "Zapper",
+  "primary": "#784ffe",
+  "blur": "#9854ff",
+  "accent": "#363091",
+  "theme": "#ffffff",
+  "logo": "./images/94cfa7e4bb248dfc.png"
+ },
+ "dYdX": {
+  "name": "dYdX",
+  "primary": "#2c2b68",
+  "blur": "#433d99",
+  "accent": "#6966ff",
+  "theme": "#ffffff",
+  "logo": null
+ },
+ "edgeX": {
+  "name": "edgeX",
+  "primary": "#272727",
+  "blur": "#2c2c2c",
+  "accent": "#575757",
+  "theme": "#ffffff",
+  "logo": "./images/bd8593c81426d222.png"
+ },
+ "Nado": {
+  "name": "Nado",
+  "primary": "#0F0F12",
+  "blur": "#1B4A2E",
+  "accent": "#59CD78",
+  "theme": "#ffffff",
+  "logo": "./images/nado-logo.png",
+  "platform": "./images/platform-nado.png"
+ }
+}

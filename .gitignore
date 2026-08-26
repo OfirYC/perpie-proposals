@@ -2,3 +2,9 @@ node_modules/
 dist/
 .env*
 .DS_Store
+
+templates/.notion-upload-cache.json
+.env.local
+
+# scratch: superseded generator kept locally only
+.superseded/

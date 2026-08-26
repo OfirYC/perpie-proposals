@@ -1,0 +1,17 @@
+{
+  "platform": "Pendle/platform.png",
+  "templates": {
+    "agent-everywhere": {
+      "enabled": true
+    },
+    "agent-telegram": {
+      "enabled": true
+    },
+    "embedded-agent": {
+      "enabled": true
+    },
+    "alert-to-action": {
+      "enabled": true
+    }
+  }
+}

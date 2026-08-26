@@ -6,7 +6,8 @@
     "test": "node --test",
     "serve": "node scripts/serve.mjs",
     "build": "node scripts/build.mjs",
-    "notion:create": "node --env-file-if-exists=.env.local scripts/notion.mjs create"
+    "notion:create": "node --env-file-if-exists=.env.local scripts/notion.mjs create",
+    "proposal": "node --env-file-if-exists=.env.local scripts/proposal.mjs"
   },
   "devDependencies": {
     "playwright": "^1.55.0"

@@ -1,0 +1,55 @@
+{
+  "slug": "nado",
+  "name": "Nado",
+  "logo": "nado/logo.png",
+  "platform": "nado/platform.png",
+  "colors": {
+    "primary": "#0F0F12",
+    "blur": "#1B4A2E",
+    "telegramAccent": "#59CD78",
+    "telegramBotAccent": "#59CD78",
+    "theme": "#FFFFFF"
+  },
+  "links": {
+    "bot": "https://t.me/nado",
+    "github": "https://github.com/ofirYC/perpie-proposals/tree/master/nado"
+  },
+  "extraAssets": {
+    "400k-grants.png": "vertex/400k-grants.png"
+  },
+  "templates": {
+    "agent-everywhere": {
+      "enabled": true,
+      "assets": {
+        "phone": "nado/telegram-phone.png",
+        "input": "nado/telegram-input.png"
+      }
+    },
+    "agent-telegram": {
+      "enabled": true,
+      "assets": {
+        "phone": "nado/telegram-phone.png",
+        "input": "nado/telegram-input.png"
+      }
+    },
+    "embedded-agent": {
+      "enabled": true
+    },
+    "alert-to-action": {
+      "enabled": true
+    }
+  },
+  "notion": {
+    "title": "Perpie <> Nado: Whitelabel Telegram Bot",
+    "sourcePageId": "733fb90b253a42c3bad7eeb8e002f9bb",
+    "sourceImages": [
+      "users-love-tg",
+      "partnership-banner",
+      "transactional-miniapp",
+      "selfcustody",
+      "400k-grants"
+    ],
+    "sourceName": "Vertex",
+    "sourceSlug": "vertex"
+  }
+}

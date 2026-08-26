@@ -265,3 +265,116 @@ body { font-family: "Avenir Next", Arial, sans-serif; }
 .pivot-flow article .pivot-position-image { width: 100%; height: 210px; margin-top: 14px; object-fit: cover; object-position: top; border-radius: 14px; }
 .pivot-fill { margin-top: 54px; padding: 18px; border-radius: 14px; background: color-mix(in srgb, var(--protocol-telegram-accent) 34%, transparent); color: color-mix(in srgb, var(--protocol-blur) 58%, #fff); font-size: 22px; font-weight: 700; }
 .pivot-loop-caption { left: 0; right: 0; bottom: 35px; text-align: center; color: rgba(255,255,255,.7); font-size: 19px; }
+
+/* ---- embedded agent over a real platform screenshot ---- */
+.pivot-embedded-agent.platform-mode { overflow: hidden; background: #050706; }
+.pivot-embedded-agent.platform-mode .platform-shot {
+  position: absolute; inset: -40px; width: calc(100% + 80px); height: calc(100% + 80px);
+  object-fit: cover; object-position: top center;
+  filter: blur(4px) saturate(1.04) brightness(.82);
+}
+.pivot-embedded-agent.platform-mode .platform-veil {
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(90deg, rgba(4,6,5,.9) 0%, rgba(4,6,5,.6) 38%, rgba(4,6,5,.22) 62%, rgba(4,6,5,.4) 100%),
+    radial-gradient(110% 85% at 76% 50%, transparent 28%, color-mix(in srgb, var(--protocol-primary) 46%, transparent) 100%);
+}
+.pivot-embedded-agent.platform-mode .platform-veil::after {   /* brand glow behind the panel */
+  content: ""; position: absolute; right: 40px; top: 90px; width: 560px; height: 430px;
+  border-radius: 50%; background: var(--protocol-telegram-accent);
+  opacity: .26; filter: blur(150px);
+}
+.pivot-embedded-agent.platform-mode h1 {
+  left: 88px; top: 196px; width: 430px; text-align: left; font-size: 62px; line-height: 1.06;
+}
+
+/* the agent panel */
+.agent-panel {
+  position: absolute; right: 78px; top: 12px; width: 492px; height: 616px;
+  display: flex; flex-direction: column; overflow: hidden;
+  border: 1px solid rgba(255,255,255,.17); border-radius: 26px;
+  background: rgba(10,13,12,.84); backdrop-filter: blur(30px);
+  box-shadow: 0 36px 88px rgba(0,0,0,.64);
+}
+.agent-panel header {
+  display: flex; align-items: center; gap: 12px; height: 66px; padding: 0 20px;
+  border-bottom: 1px solid rgba(255,255,255,.1); background: rgba(255,255,255,.04);
+}
+.agent-avatar {
+  display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; overflow: hidden;
+  background: linear-gradient(-135deg, #5fddff, #28f5a4 48%, #15fe85);
+}
+.agent-avatar .protocol-logo { width: 32px; height: 32px; object-fit: cover; }
+.agent-id { display: flex; flex-direction: column; gap: 3px; }
+.agent-id strong { font-size: 16px; }
+.agent-id small { display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,.54); font-size: 12px; }
+.agent-id small i { width: 7px; height: 7px; border-radius: 50%; background: var(--protocol-telegram-accent); }
+.agent-panel kbd {
+  margin-left: auto; padding: 5px 9px; border: 1px solid rgba(255,255,255,.14);
+  border-radius: 7px; background: rgba(255,255,255,.07);
+  color: rgba(255,255,255,.66); font: 600 11px/1 inherit;
+}
+.agent-thread { flex: 1; display: flex; flex-direction: column; gap: 11px; padding: 16px 20px 0; }
+.from-user {
+  max-width: 322px; margin: 0 0 0 auto; padding: 11px 15px;
+  border-radius: 18px 18px 6px 18px; background: var(--protocol-telegram-accent);
+  color: #fff; font-size: 15px; line-height: 1.4;
+}
+.agent-steps {
+  padding: 11px 13px; border: 1px solid rgba(255,255,255,.09);
+  border-radius: 13px; background: rgba(255,255,255,.04);
+}
+.agent-steps b {
+  display: block; margin-bottom: 8px;
+  color: color-mix(in srgb, var(--protocol-telegram-accent) 45%, #fff);
+  font-size: 12px; letter-spacing: .3px;
+}
+.agent-steps ul { display: flex; flex-direction: column; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.agent-steps li { position: relative; padding-left: 20px; color: rgba(255,255,255,.62); font-size: 12.5px; line-height: 1.35; }
+.agent-steps li::before {
+  content: "✓"; position: absolute; left: 0; top: -1px; color: rgba(255,255,255,.44); font-size: 12px;
+}
+.from-agent { margin: 0; color: rgba(255,255,255,.84); font-size: 15px; line-height: 1.42; }
+.agent-tx { overflow: hidden; border-radius: 16px; background: #fff; box-shadow: 0 12px 30px rgba(0,0,0,.35); }
+.tx-head { display: flex; align-items: center; gap: 10px; padding: 14px 16px; border-bottom: 1px solid rgba(0,0,0,.06); }
+.tx-token { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: #f7931a; }
+.tx-token svg { width: 17px; height: 17px; }
+.tx-pair { display: flex; flex-direction: column; gap: 2px; }
+.tx-pair strong { color: #111; font-size: 15px; }
+.tx-pair small { color: #8a8a8a; font-size: 11.5px; }
+.tx-side {
+  margin-left: auto; padding: 6px 11px; border-radius: 8px;
+  background: color-mix(in srgb, var(--protocol-telegram-accent) 12%, transparent);
+  color: color-mix(in srgb, var(--protocol-telegram-accent) 78%, #000);
+  font-size: 11.5px; font-weight: 700; letter-spacing: .4px;
+}
+.agent-tx table { width: 100%; margin: 9px 0; border-collapse: collapse; }
+.agent-tx th { color: #7a7a7a; font-size: 13px; font-weight: 400; text-align: left; padding: 4.5px 0 4.5px 16px; }
+.agent-tx td { color: #111; font-size: 13px; font-weight: 600; text-align: right; padding: 4.5px 16px 4.5px 0; }
+.agent-tx footer {
+  padding: 10px 16px; border-top: 1px solid rgba(0,0,0,.06);
+  background: #f6f7f6; color: #5f6b65; font-size: 12px;
+}
+.agent-actions { display: flex; gap: 10px; margin-top: auto; padding-bottom: 16px; }
+.agent-actions button { height: 46px; border: 0; border-radius: 12px; font-size: 15px; font-weight: 700; }
+.agent-actions .primary {
+  flex: 1; background: var(--protocol-telegram-accent); color: #fff;
+  box-shadow: 0 6px 18px color-mix(in srgb, var(--protocol-telegram-accent) 35%, transparent);
+}
+.agent-actions .ghost {
+  width: 138px; border: 1px solid rgba(255,255,255,.17);
+  background: rgba(255,255,255,.07); color: rgba(255,255,255,.82); font-weight: 600; font-size: 14px;
+}
+.agent-composer {
+  display: flex; align-items: center; gap: 9px; height: 70px; padding: 0 20px;
+  border-top: 1px solid rgba(255,255,255,.1); background: rgba(255,255,255,.03);
+}
+.agent-composer span {
+  flex: 1; display: flex; align-items: center; height: 46px; padding: 0 14px;
+  border: 1px solid rgba(255,255,255,.16); border-radius: 13px; background: rgba(255,255,255,.06);
+  color: rgba(255,255,255,.48); font-size: 14px;
+}
+.agent-composer i {
+  display: grid; place-items: center; width: 32px; height: 32px; margin-left: -52px;
+  border-radius: 50%; background: var(--protocol-telegram-accent); color: #fff; font-style: normal; font-size: 15px;
+}

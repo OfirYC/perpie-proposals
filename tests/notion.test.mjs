@@ -106,5 +106,57 @@ test("source proposal layout is cloned while its visual URLs become generated as
   assert.deepEqual(created.children.map(block => block.type), ["heading_2", "image", "embed"]);
   assert.equal(created.children[0].heading_2.rich_text[0].text.content, "Avantis integration uses avantis-demo APIs");
   assert.match(created.children[1].image.external.url, /^https:\/\/example\.github\.io\/perpie\/avantis-demo\/images\/users-love-tg\.png\?v=\d+$/);
-  assert.equal(created.children[2].embed.url, "https://example.github.io/perpie/avantis-demo/features.html");
+  // one shared carousel page, parameterised by protocol
+  assert.equal(created.children[2].embed.url, "https://example.github.io/perpie/slider.html?protocol=avantis-demo&set=features");
+});
+
+test("pivot sections are spliced into the cloned proposal without disturbing it", async () => {
+  const { applyPivot } = await import("../scripts/notion-lib.mjs");
+  const heading = (type, content) => ({ object: "block", type, [type]: { rich_text: [{ type: "text", plain_text: content, text: { content } }] } });
+  const cloned = [
+    heading("heading_2", "Why users LOVE Telegram bots?"),
+    heading("heading_2", "Why Partner With Us"),
+    heading("heading_2", "Feature Suite"),
+    heading("heading_3", "Trading Experience"),
+    heading("heading_2", "Fees")
+  ];
+  const warnings = [];
+  const out = await applyPivot(cloned, {
+    protocolName: "Vertex", root: "https://example.github.io/perpie/vertex",
+    version: 1, assetDir: null, uploads: new Map(), headers: {}, warnings
+  });
+  const text = block => (block[block.type]?.rich_text ?? []).map(item => item.plain_text ?? item.text?.content ?? "").join("");
+  const outline = out.map(text);
+
+  // no anchor was missed (asset warnings are expected: this fixture has no local build)
+  assert.equal(warnings.filter(w => w.includes("pivot anchor")).length, 0);
+  // every original block survives, in its original order
+  for (const original of cloned.map(text)) assert.ok(outline.includes(original));
+  assert.ok(outline.indexOf("Why Partner With Us") > outline.indexOf("Why users LOVE Telegram bots?"));
+
+  // the intent narrative lands before the partnership pitch
+  const intent = outline.indexOf("The Internet Is Moving From Clicking To Asking");
+  assert.ok(intent > -1 && intent < outline.indexOf("Why Partner With Us"));
+
+  // the agent leads the feature suite
+  const agent = outline.indexOf("The AI Agent (Your New Front Door)");
+  assert.ok(agent > outline.indexOf("Feature Suite") && agent < outline.indexOf("Trading Experience"));
+
+  // protocol name is interpolated, never left as a placeholder
+  assert.ok(!out.some(block => text(block).includes("{{PROTOCOL}}")));
+  assert.ok(out.some(block => text(block).includes("Vertex")));
+
+  // pivot artwork falls back to the hosted asset when nothing is built locally
+  const images = out.filter(block => block.type === "image");
+  assert.equal(images.length, 4);
+  assert.ok(images.every(block => block.image.external.url.startsWith("https://example.github.io/perpie/vertex/images/")));
+});
+
+test("a missing pivot anchor warns instead of silently dropping the section", async () => {
+  const { applyPivot } = await import("../scripts/notion-lib.mjs");
+  const warnings = [];
+  const out = await applyPivot([], { protocolName: "Vertex", root: "https://x", version: 1, assetDir: null, uploads: new Map(), headers: {}, warnings });
+  assert.equal(out.length, 0);
+  const anchors = warnings.filter(w => w.includes("pivot anchor not found"));
+  assert.equal(anchors.length, 2);
 });

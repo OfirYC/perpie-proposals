@@ -150,3 +150,45 @@ test("partnership banner uses the real Perpie lockup with a dynamic partner", ()
   assert.match(html, /src="\/vertex\/logo\.jpg"/);
   assert.match(html, />Vertex<\/strong>/);
 });
+
+test("a platform screenshot turns the embedded agent into a real product shot", () => {
+  const base = {
+    slug: "pendle", name: "Pendle", logo: "Pendle/logo.jpg",
+    colors: { primary: "#000000", blur: "#242424", telegramAccent: "#808181", theme: "#FFFFFF", telegramBotAccent: "#808181" },
+    templates: { "embedded-agent": { enabled: true } }
+  };
+
+  const withShot = renderTemplate("embedded-agent", { ...base, platform: "Pendle/platform.png" });
+  assert.match(withShot, /class="proposal pivot pivot-embedded-agent platform-mode"/);
+  assert.match(withShot, /class="platform-shot" src="\/Pendle\/platform\.png"/);
+  assert.match(withShot, /class="platform-veil"/);
+  assert.match(withShot, /class="agent-panel"/);
+  // it is a designed agent surface, not a bare chat: identity, tool trail,
+  // a structured transaction card and a real action row
+  assert.match(withShot, /class="agent-id"/);
+  assert.match(withShot, /class="agent-steps"/);
+  assert.match(withShot, /Worked through 3 steps/);
+  assert.match(withShot, /class="agent-tx"/);
+  assert.match(withShot, /class="tx-side">LONG/);
+  assert.match(withShot, /<th>Liquidation<\/th>/);
+  assert.match(withShot, /class="primary">Review &amp; sign/);
+  assert.match(withShot, /class="agent-composer"/);
+  // the synthetic terminal is gone, the agent panel replaces it
+  assert.ok(!withShot.includes("pivot-terminal"));
+
+  // unset -> the original generated terminal, so every other protocol is untouched
+  const without = renderTemplate("embedded-agent", base);
+  assert.ok(!without.includes("platform-mode"));
+  assert.match(without, /class="pivot-terminal"/);
+});
+
+test("a template-level platform override beats the protocol-wide screenshot", () => {
+  const html = renderTemplate("embedded-agent", {
+    slug: "pendle", name: "Pendle", logo: "Pendle/logo.jpg",
+    platform: "Pendle/platform.png",
+    colors: { primary: "#000000", blur: "#242424", telegramAccent: "#808181", theme: "#FFFFFF", telegramBotAccent: "#808181" },
+    templates: { "embedded-agent": { enabled: true, assets: { platform: "Pendle/alt-shot.png" } } }
+  });
+  assert.match(html, /src="\/Pendle\/alt-shot\.png"/);
+  assert.ok(!html.includes("platform.png"));
+});

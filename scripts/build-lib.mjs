@@ -1,9 +1,11 @@
-import { copyFile, mkdir, rm, writeFile } from "node:fs/promises";
+import { copyFile, mkdir, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { chromium } from "playwright";
 
 import { loadProtocol } from "../src/config.mjs";
 import { enabledTemplates } from "../src/templates.mjs";
+import { renderBoard, BOARD_IDS } from "../src/canvas.mjs";
+import { SLIDER_SETS, sliderPage } from "../src/sliders.mjs";
 import { startServer } from "./server-lib.mjs";
 
 const html = value => String(value).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;");
@@ -24,6 +26,16 @@ body{margin:0;padding:32px;background:#111;color:#fff;font:16px system-ui}header
 </style></head><body><header><img src="images/logo.png" alt=""><h1>${html(protocol.name)} proposal assets</h1></header><main class="grid">${cards}</main></body></html>`;
 }
 
+// a protocol is either a catalog row or a standalone protocols/<slug>.json
+export async function allSlugs(dir) {
+  const catalog = JSON.parse(await readFile(join(dir, "protocols/catalog.json"), "utf8")).map(p => p.slug);
+  const files = (await readdir(join(dir, "protocols")))
+    .filter(name => name.endsWith(".json") && name !== "catalog.json")
+    .map(name => name.replace(/\.json$/, ""));
+  return [...new Set([...catalog, ...files])];
+}
+
+
 export async function buildProtocol(root, slug, outputRoot = join(root, "dist")) {
   const protocol = await loadProtocol(root, slug);
   const templates = enabledTemplates(protocol);
@@ -40,7 +52,15 @@ export async function buildProtocol(root, slug, outputRoot = join(root, "dist"))
       const failures = [];
       page.on("pageerror", error => failures.push(error.message));
       page.on("response", response => { if (response.status() >= 400) failures.push(`${response.status()} ${response.url()}`); });
-      await page.goto(`http://127.0.0.1:${port}/render/${slug}/${template.id}`, { waitUntil: "networkidle" });
+      // Boards designed on the canvas render straight from their exported
+      // fragment, brand-tokenised from the protocol JSON. Everything else comes
+      // from the HTML templates over the dev server.
+      if (BOARD_IDS[template.id] && !protocol.assets?.[template.id]) {
+        const html = await renderBoard(root, protocol, template.id);
+        await page.setContent(html, { waitUntil: "networkidle" });
+      } else {
+        await page.goto(`http://127.0.0.1:${port}/render/${slug}/${template.id}`, { waitUntil: "networkidle" });
+      }
       await page.evaluate(() => Promise.all([document.fonts.ready, ...[...document.images].map(image => image.complete ? true : new Promise(resolve => image.addEventListener("load", resolve, { once: true })))]));
       if (failures.length) throw new Error(`${template.id}: ${failures.join(", ")}`);
       await page.screenshot({ path: join(images, `${template.id}.png`), type: "png" });
@@ -60,10 +80,20 @@ export async function buildProtocol(root, slug, outputRoot = join(root, "dist"))
     templates: templates.map(({ id, width, height }) => ({ id, width, height, file: `images/${id}.png` }))
   };
   await writeFile(join(target, "index.html"), gallery(protocol, templates));
-  const featureSlides = ["agent-everywhere", "agent-telegram", "embedded-agent", "alert-to-action", "ai-feature", "charts", "notifications", "traders-tracker", "batch-transactions"]
-    .filter(id => templates.some(template => template.id === id));
-  await writeFile(join(target, "features.html"), slider(`${protocol.name} features`, featureSlides));
-  await writeFile(join(target, "social-features.html"), slider(`${protocol.name} social features`, ["groups", "pnlcards", "referral-system"]));
   await writeFile(join(target, "manifest.json"), JSON.stringify(manifest, null, 2));
+  // per-protocol carousels are superseded by the shared /slider.html?protocol=…,
+  // but keep them so proposals generated before the switch keep resolving
+  for (const [file, ids] of Object.entries(SLIDER_SETS)) {
+    const slides = ids.filter(id => templates.some(template => template.id === id));
+    const name = file === "features" ? "features.html" : "social-features.html";
+    await writeFile(join(target, name), slider(`${protocol.name} ${file}`, slides));
+  }
+  await writeSliderPage(outputRoot);
   return manifest;
+}
+
+// the shared carousel lives at the site root, next to the per-protocol folders
+export async function writeSliderPage(outputRoot) {
+  await mkdir(outputRoot, { recursive: true });
+  await writeFile(join(outputRoot, "slider.html"), sliderPage());
 }

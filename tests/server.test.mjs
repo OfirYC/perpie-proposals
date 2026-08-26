@@ -12,10 +12,10 @@ test("render route serves inherited protocol HTML without exposing repository fi
   t.after(() => server.close());
   const { port } = server.address();
 
-  const rendered = await fetch(`http://127.0.0.1:${port}/render/vertex/groups`);
+  const rendered = await fetch(`http://127.0.0.1:${port}/render/nado/groups`);
   const privateFile = await fetch(`http://127.0.0.1:${port}/.git/config`);
 
   assert.equal(rendered.status, 200);
-  assert.match(await rendered.text(), /data-protocol="vertex"/);
+  assert.match(await rendered.text(), /data-protocol="nado"/);
   assert.equal(privateFile.status, 404);
 });

@@ -58,6 +58,11 @@ function validate(protocol) {
       throw new Error(`Invalid protocol field: colors.${key}`);
     }
   }
+  if (protocol.platform !== undefined) {
+    if (typeof protocol.platform !== "string" || !protocol.platform.trim() || protocol.platform.includes("..")) {
+      throw new Error("Invalid protocol field: platform");
+    }
+  }
   for (const key of ["bot", "github"]) {
     try {
       new URL(protocol.links?.[key]);
@@ -109,7 +114,10 @@ export async function loadProtocol(root, slug) {
   }
   const catalog = await readJson(join(root, "protocols/catalog.json"));
   const base = catalog.find(protocol => protocol.slug === slug);
-  if (!base) throw new Error(`Unknown protocol: ${slug}`);
   const override = await readJson(join(root, `protocols/${slug}.json`), true);
-  return validate(merge(PROPOSAL_DEFAULTS, merge(expandLegacy(base), override)));
+  // a protocol may live entirely in its own file — name, logo, colors, platform —
+  // so adding one is a single JSON file with no catalog edit
+  if (!base && !Object.keys(override).length) throw new Error(`Unknown protocol: ${slug}`);
+  const merged = base ? merge(expandLegacy(base), override) : { slug, ...override };
+  return validate(merge(PROPOSAL_DEFAULTS, merged));
 }
