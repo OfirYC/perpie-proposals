@@ -7,6 +7,14 @@
 // a protocol is skipped instead of 404ing, and adding a protocol needs no new
 // slider file — the CI build (`npm run build -- --all`) already publishes its
 // images.
+//
+// Sizing note: Notion's API cannot set an embed block's dimensions (block-level
+// `format`, `embed.format`, `embed.aspect_ratio` and `embed.width/height` are
+// all rejected by validation), and Notion paints a white surface behind the
+// iframe, so a transparent page shows white bars. The page therefore fills its
+// own box: a blurred, darkened copy of the current board covers the frame and
+// the sharp board sits on top. Whatever height Notion picks, the block reads as
+// one deliberate surface instead of a banner stranded in a white rectangle.
 
 export const SLIDER_SETS = {
   features: ["agent-everywhere", "agent-telegram", "embedded-agent", "alert-to-action",
@@ -29,32 +37,40 @@ export function sliderPage() {
 <title>Perpie proposal carousel</title>
 <style>
 *{box-sizing:border-box}
-/* Transparent, deliberately: the Notion API cannot set an embed block's height,
-   so the iframe is always taller than a 2.34:1 banner. With no background of our
-   own the host page shows through instead of black bars, and the block reads as
-   the banner itself rather than a banner floating in a box. */
-html,body{margin:0;width:100%;height:100%;background:transparent;overflow:hidden;
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#0c0e0d;
   font:14px Inter,system-ui,-apple-system,sans-serif;color:#fff}
-.stage{position:relative;width:100%;height:100%;display:grid;place-items:center}
-/* The frame carries the board's own 2.34:1 ratio, so the controls sit ON the
-   banner rather than floating in the host's leftover iframe height — and the
-   boards are never cropped to fit a box we do not control. */
-.frame{position:relative;width:100%;aspect-ratio:1500/640;max-height:100%;
-  margin:auto;border-radius:6px;overflow:hidden}
+.stage{position:relative;width:100%;height:100%;display:grid;place-items:center;
+  background:#0c0e0d;overflow:hidden}
+/* blurred fill: same board, scaled to cover, so no host colour ever shows */
+.bg{position:absolute;inset:0;background-size:cover;background-position:center;
+  transform:scale(1.15);filter:blur(26px) brightness(.5) saturate(1.15);
+  opacity:0;transition:opacity .35s}
+.bg.current{opacity:1}
+/* the board keeps its own 2.34:1 ratio and never crops */
+.frame{position:relative;width:100%;aspect-ratio:1500/640;max-height:100%;margin:auto;
+  border-radius:8px;overflow:hidden;box-shadow:0 10px 40px #00000059}
 .slide{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;
   opacity:0;transition:opacity .35s}
 .slide.current{opacity:1}
-.nav{position:absolute;z-index:2;top:50%;translate:0 -50%;display:grid;place-items:center;
-  width:42px;height:42px;border:1px solid #ffffff40;border-radius:50%;background:#000000a6;
-  color:#fff;font-size:24px;line-height:1;cursor:pointer;padding:0;transition:background .2s}
-.nav:hover{background:#000000d9}
-.prev{left:14px}.next{right:14px}
+.nav{position:absolute;z-index:3;top:50%;translate:0 -50%;display:grid;place-items:center;
+  /* scales with the box: Notion's default embed is small, and a fixed 38px
+     control swallows the board at that size */
+  width:clamp(24px,5.2vw,38px);height:clamp(24px,5.2vw,38px);
+  font-size:clamp(14px,3vw,22px);
+  border:1px solid #ffffff3d;border-radius:50%;background:#000000a6;
+  color:#fff;line-height:1;cursor:pointer;padding:0;
+  transition:background .2s,border-color .2s;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.nav:hover{background:#000000d9;border-color:#ffffff8a}
+.prev{left:clamp(6px,1.6vw,12px)}.next{right:clamp(6px,1.6vw,12px)}
 .nav:focus-visible{outline:2px solid #fff;outline-offset:3px}
-.dots{position:absolute;z-index:2;bottom:10px;left:50%;translate:-50% 0;display:flex;gap:7px}
-.dot{width:7px;height:7px;border-radius:50%;border:0;padding:0;background:#ffffff40;cursor:pointer}
+.dots{position:absolute;z-index:3;bottom:clamp(6px,2vw,14px);left:50%;translate:-50% 0;
+  display:flex;gap:6px;padding:5px 9px;border-radius:100px;background:#00000059;
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.dot{width:6px;height:6px;border-radius:50%;border:0;padding:0;background:#ffffff4d;cursor:pointer;
+  transition:background .2s}
 .dot.current{background:#fff}
-.msg{opacity:.6}
-@media (prefers-reduced-motion:reduce){.slide{transition:none}}
+.msg{position:relative;z-index:3;opacity:.65}
+@media (prefers-reduced-motion:reduce){.slide,.bg{transition:none}}
 </style></head><body>
 <div class="stage" id="stage"><p class="msg" id="msg">Loading…</p></div>
 <script>
@@ -64,14 +80,12 @@ const set = params.get("set") === "social" ? "social" : "features";
 const SETS = ${JSON.stringify(SLIDER_SETS)};
 const stage = document.getElementById("stage");
 const msg = document.getElementById("msg");
-
 const fail = why => { msg.textContent = why; };
 
 (async () => {
   if (!protocol) return fail("No protocol specified.");
-  // The manifest is the source of truth for what was actually built. Requiring
-  // it means an unknown or not-yet-deployed protocol shows a message instead of
-  // a carousel of broken images.
+  // the manifest is the source of truth for what was actually built, so an
+  // unknown protocol shows a message instead of a carousel of broken images
   let built;
   try {
     const res = await fetch(protocol + "/manifest.json", { cache: "no-cache" });
@@ -86,7 +100,17 @@ const fail = why => { msg.textContent = why; };
   msg.remove();
   const frame = document.createElement("div");
   frame.className = "frame";
+
+  const backdrops = ids.map((id, i) => {
+    const src = protocol + "/images/" + id + ".png";
+    const bg = document.createElement("div");
+    bg.className = "bg" + (i ? "" : " current");
+    bg.style.backgroundImage = "url('" + src + "')";
+    stage.append(bg);
+    return bg;
+  });
   stage.append(frame);
+
   const slides = ids.map((id, i) => {
     const img = document.createElement("img");
     img.className = "slide" + (i ? "" : " current");
@@ -121,11 +145,9 @@ const fail = why => { msg.textContent = why; };
 
   let current = 0, timer;
   const go = next => {
-    slides[current].classList.remove("current");
-    buttons[current].classList.remove("current");
+    for (const list of [slides, backdrops, buttons]) list[current].classList.remove("current");
     current = (next + slides.length) % slides.length;
-    slides[current].classList.add("current");
-    buttons[current].classList.add("current");
+    for (const list of [slides, backdrops, buttons]) list[current].classList.add("current");
     restart();
   };
   const restart = () => {
@@ -133,7 +155,7 @@ const fail = why => { msg.textContent = why; };
     if (slides.length > 1) timer = setInterval(() => go(current + 1), 5000);
   };
 
-  if (slides.length > 1) { nav("prev", "Previous", -1); nav("next", "Next", 1); frame.append(dots); }
+  if (slides.length > 1) { nav("prev", "Previous", -1); nav("next", "Next", 1); stage.append(dots); }
   addEventListener("keydown", e => {
     if (e.key === "ArrowLeft") go(current - 1);
     if (e.key === "ArrowRight") go(current + 1);
